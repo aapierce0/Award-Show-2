@@ -1,0 +1,14 @@
+{
+    "name": "oscars",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"express": "4.4.4",
+		"socket.io":"1.0",
+        "underscore":"1.6.0",
+        "node-uuid":"1.4.1"
+	}
+}
