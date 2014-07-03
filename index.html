@@ -1,0 +1,49 @@
+<!doctype html>
+<html ng-app="Oscars">
+
+<head>
+	<title>Oscars 2</title>
+
+	<script type="text/javascript" src="/js/angular.min.js"></script>
+	<script type="text/javascript" src="/js/angular-touch.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+	<script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+
+	<script type="text/javascript" src="/js/underscore-min.js"></script>
+
+	<script src="js/bootstrap.min.js"></script>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+	<script type="text/javascript" src="/js/controllers.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+</head>
+
+<body ng-controller="NomineePickerCtrl" id="User">
+
+
+
+	<!-- The header bar of this web app will contain the logged in user on the left, and the number of coins on the right. -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-if="me">
+		<div class="container">
+			<div class="navbar-text navbar-left username">{{me.name}}</div>
+			<div class="navbar-text navbar-right score"><span class="glyphicon glyphicon-certificate"></span> {{me.score}}</div>
+		</div>
+	</nav>
+
+
+
+
+
+	<!-- This is the template for each category of votes. -->
+	<div class="container main-content" ng-include="contentURL"></div>
+
+
+
+
+</body>
+</html>

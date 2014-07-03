@@ -1,0 +1,56 @@
+<table class="table users">
+	<thead>
+		<tr>
+			<th>Username</th>
+			
+			<th class="align-center border-left">W</th><!-- Wins -->
+			<th class="align-center">L</th><!-- Losses -->
+			<th class="align-center">P</th><!-- Picks -->
+			<th class="align-center">T</th><!-- Total Categories -->
+			<th class="align-center">Acc.</th><!-- Accuracy = W / (W + L) -->
+			<th class="align-center border-right">Conf.</th><!-- Confidence = P / T -->
+
+
+
+			<th colspan="2">Score</th>
+			<th class="uuid border-left">UUID</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="user in oscarsModel.allUsers">
+			<td>
+				<div class="input-group input-group-sm">
+					<input type="text" class="form-control" ng-model="user.name">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="oscarsModel.updateUsers(user)"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+					</span>
+				</div>
+			</td>
+
+
+			<td class="align-center border-left">{{totalWinsForUser(user)}}</td>
+			<td class="align-center">{{totalLossesForUser(user)}}</td>
+			<td class="align-center">{{totalPicksForUser(user)}}</td>
+			<td class="align-center">{{oscarsModel.categories.length}}</td>
+			<td class="align-center">{{(totalWinsForUser(user) / (totalWinsForUser(user) + totalLossesForUser(user))).toFixed(3)}}</td>
+			<td class="align-center border-right">{{(totalPicksForUser(user) / oscarsModel.categories.length).toFixed(3)}}</td>
+
+
+			<td><span class="glyphicon glyphicon-certificate"></span> {{user.score}}</td>
+
+			<!-- Control User scores -->
+			<td>
+				<div class="input-group input-group-sm">
+					<input type="number" min="0" max="10000" step="25" class="form-control" ng-model="adjustScores[user.uuid]">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="addScore(user)"><span class="glyphicon glyphicon-plus-sign"></span></button>
+						<button class="btn btn-default" type="button" ng-click="subtractScore(user)"><span class="glyphicon glyphicon-minus-sign"></span></button>
+					</span>
+				</div>
+			</td>
+
+
+			<td class="uuid border-left">{{user.uuid}}</td>
+		</tr>
+	</tbody>
+</table>

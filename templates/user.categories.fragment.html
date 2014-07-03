@@ -1,0 +1,16 @@
+<div ng-repeat="category in oscarsModel.categories" class="category" ng-class="{locked: category.locked}">
+	<div class="category-name">{{category.name}}
+		<span class="glyphicon glyphicon-lock" ng-if="category.locked"></span>
+	</div>
+	<div class="value">Ante: <span class="glyphicon glyphicon-certificate"></span> {{category.value}}</div>
+	<div class="timeRemaining" ng-if="(oscarsModel.timeRemainingForCategory(category) > 0)">Time Remaining: {{oscarsModel.timeRemainingForCategory(category)}} {{oscarsModel.timeRemainingForCategory(category) == 1 ? "second" : "seconds"}}.</div>
+
+	<!-- Display a box for each individual nominee -->
+	<div ng-repeat="nominee in category.nominees" class="nominee" ng-class="{selected: (nominee.title == me.picks[category.name]), winner: nominee.winner, loser: oscarsModel.nomineeLost(category, nominee)}" ng-click="selectNominee(category.name, nominee.title)">
+		<span class="title">{{nominee.title}}</span>
+		<span class="subtitle">{{nominee.subtitle}}</span>
+		<div class="users">
+			<span ng-repeat="user in oscarsModel.usersWhoPicked(category.name, nominee.title)" ng-class="{userToken: true, selected: (user.name == me.name)}">{{user.name}}</span>
+		</div>
+	</div>
+</div>

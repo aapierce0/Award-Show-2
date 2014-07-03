@@ -1,0 +1,39 @@
+<!doctype html>
+<html ng-app="Oscars">
+
+<head>
+	<title>Oscars 2 | Admin</title>
+
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/angular-touch.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+
+	<script type="text/javascript" src="js/underscore-min.js"></script>
+
+	<script src="js/bootstrap.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+	<script type="text/javascript" src="js/controllers.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+</head>
+
+<body ng-controller="AdminCtrl" id="Admin">
+
+	<ul class="nav nav-tabs" role="tablist">
+		<li ng-class="{active:selectedTab=='users'}"><a ng-click="setSelectedTab('users')"><span class="glyphicon glyphicon-user"></span> Users</a></li>
+		<li ng-class="{active:selectedTab=='categories'}"><a ng-click="setSelectedTab('categories')"><span class="glyphicon glyphicon-film"></span> Categories</a></li>
+		<li ng-class="{active:selectedTab=='lights'}"><a ng-click="setSelectedTab('lights')">Lights</a></li>
+	</ul>
+
+	<!-- This is the template for each category of votes. -->
+	<div class="main-content" ng-include="contentURL"></div>
+
+
+</body>
+</html>

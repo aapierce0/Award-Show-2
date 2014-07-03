@@ -1,0 +1,232 @@
+
+body {
+	background-color: #DEF;
+}
+
+a {
+	cursor: pointer;
+}
+
+.glyphicon-certificate {
+	color: orange;
+}
+
+
+
+
+/* Need to account for the title bar */
+#User .main-content {
+	margin-top: 60px;
+}
+
+
+/* Override some bootsrap style */
+#User .navbar-text {
+	display: inline-block;
+}
+#User .navbar-right {
+	float: right;
+}
+
+
+/* Style for the category boxes */
+#User .category {
+	font-size: 1.1em;
+	text-align: center;
+	display: block;
+	height: auto;
+
+	margin-bottom: 2em;
+}
+
+#User .category.locked {
+	opacity: 0.5;
+}
+
+#User @media (min-width: 768px) {
+	#User .category {
+		font-size: 1.4em;
+	}
+}
+
+#User .category .category-name {
+	display: block;
+	text-align: left;
+
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#User .category .value {
+	text-align: left;
+	font-size: 1.1em;
+}
+
+#User .category .nominee {
+	border: solid 1px #000;
+	background-color: #FFF;
+
+	text-align: center;
+	display: inline-block;
+	vertical-align: top;
+
+	padding: 1.2em 0.4em;
+	margin: 0.7em 0%;
+	width: 100%;
+}
+
+@media (min-width: 768px) {
+
+	#User .category .nominee {
+		padding: 1.2em 0;
+		margin: 1em 2%;
+		width: 45%;
+	}
+}
+
+#User .category .nominee.selected {
+	border-color: blue;
+	color: blue;
+}
+
+#User .category .nominee.winner {
+	border-color: green;
+	color: green;
+}
+
+#User .category .nominee.selected.loser {
+	border-color: red;
+	color: red;
+}
+
+#User .category .nominee > span {
+	display: block;
+	text-align: center;
+}
+
+#User .category .nominee span.title {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#User .category .nominee span.subtitle {
+	font-style: italic;
+}
+
+#User .category .nominee .users {
+	font-size: 0.8em;
+	margin-top: 8px;
+}
+
+#User .category .nominee .users .userToken {
+	border: solid 1px;
+	border-color: inherit;
+	border-radius: 1em;
+	padding: 0 0.6em;
+	margin: 0 2px 0.2em;
+
+	display: inline-block;
+}
+
+#User .category .nominee.selected .users .userToken.selected {
+	color: white;
+	font-weight: bold;
+	background-color: blue;
+}
+
+#User .category .nominee.selected.winner .users .userToken.selected {
+	background-color: green;
+}
+
+#User .category .nominee.selected.loser .users .userToken.selected {
+	background-color: red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Admin {
+	margin-top: 1em;
+}
+
+#Admin > ul.nav > li:first-child {
+	margin-left: 2em;
+}
+
+#Admin table.table {
+	background-color: #FFF;
+}
+
+#Admin table.table.users {
+	white-space: nowrap;
+}
+
+#Admin table.table td {
+	vertical-align: middle;
+}
+
+#Admin table.table .border-left {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #DDD;
+	padding-left: 12px;
+}
+
+#Admin table.table .border-right {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #DDD;
+	padding-right: 12px;
+}
+
+#Admin table.table .align-center {
+	text-align: center;
+}
+
+#Admin td.uuid {
+	font-family: Inconsolata, consolas, Menlo, Courier, monospace;
+	
+}
+/* Hide the UUID column unless we're in iPad landscape mode */
+@media (max-width: 1023px) {
+	#Admin .uuid {
+		display: none;
+	}
+}
+
+#Admin table.categories tr.category.pickWinner span.nominee {
+	background-color: blue;
+	color: #FFF;
+}
+
+#Admin table.categories span.nominee {
+	padding: 0.4em;
+	margin: 0.2em;
+	background-color: #EEE;
+	border-radius: 4px;
+	display: inline-block;
+	font-weight: bold;
+}
+
+#Admin table.categories span.nominee.winner {
+	background-color: green;
+	color: #FFF;
+	font-weight: bold;
+}
+
+

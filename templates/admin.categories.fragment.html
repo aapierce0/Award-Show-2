@@ -1,0 +1,32 @@
+<table class="table categories">
+	<thead>
+		<tr>
+			<th>Category</th>
+			<th><!-- Spacer for the "Lock" icon --></th>
+			<th>Value</th>
+			<th>Nominees</th>
+			<th>Pot</th>
+			<th>Controls</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="category in oscarsModel.categories" class="category" ng-class="{locked: category.locked, pickWinner:acceptWinner[category.name]}">
+			<td><span class="glyphicon glyphicon-star" ng-if="category.distinguished"></span> {{category.name}}</td>
+			<td><span class="glyphicon glyphicon-lock" ng-if="category.locked"></span><span ng-if="(oscarsModel.timeRemainingForCategory(category) > 0)">{{oscarsModel.timeRemainingForCategory(category)}}</span></td>
+			<td>{{category.value}}</td>
+			<td>
+				<span ng-repeat="nominee in category.nominees" class="nominee" ng-class="{winner: nominee.winner}" ng-click="pickWinner(category, nominee)">
+					{{nominee.title}} <span class="badge">{{oscarsModel.usersWhoPicked(category.name, nominee.title).length}}</span>
+				</span>
+			</td>
+			<td>{{oscarsModel.usersWhoVoted(category.name).length * category.value}}</td>
+			<td>
+				<button ng-if="!category.locked" ng-click="startCountdownForCategory(category)">Countdown</button>
+				<button ng-if="!category.locked" ng-click="lockCategory(category)">Lock Now</button>
+
+				<button ng-if="category.locked" ng-click="prepareForWinnerSelection(category)">Choose Winner</button>
+				<button ng-if="category.locked" ng-click="unlockCategory(category)">Unlock</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
