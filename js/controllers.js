@@ -94,12 +94,15 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		return _.findWhere(oscarsModel.categories, {name: categoryName});
 	}
 
-	oscarsModel.resultsAnnouncedForCategory = function(categoryName) {
-		var category = oscarsModel.categoryNamed(categoryName);
+	oscarsModel.nomineeNamed = function(category, nomineeTitle) {
+		return _.findWhere(category.nominees, {title: nomineeTitle});
+	}
+
+	oscarsModel.categoryWasCalled = function(category) {
 		return _.some(category.nominees, function(nominee) {
 			return nominee.winner;
 		});
-	}
+	};
 
 	oscarsModel.nomineeLost = function(category, nominee) {
 		// If any nominee in this category won other than the selected one, then they are a loser.
@@ -107,6 +110,10 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 			return someNominee.winner;
 		});
 	}
+
+
+
+
 
 
 
@@ -139,6 +146,9 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 			}
 		});
 	}
+
+
+
 
 
 	// Make sure to update data when there are updates available.
@@ -211,7 +221,13 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 		if (oscarsModel.categoryNamed(category).locked)
 			return;
 
-		$scope.me.picks[category] = nominee;
+		// If the user already selected this nominee, then this click should unselect it.
+		if ($scope.me.picks[category] == nominee) {
+			delete $scope.me.picks[category];
+		} else {
+			$scope.me.picks[category] = nominee;
+		}
+
 		oscarsModel.updateUsers($scope.me);
 	}
 
@@ -328,7 +344,6 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 	$scope.adjustScores = {};
 
 	$scope.addScore = function(user) {
-		console.log("Adding: "+parseInt($scope.adjustScores[user.uuid]));
 		user.score += parseInt($scope.adjustScores[user.uuid]);
 		delete $scope.adjustScores[user.uuid];
 		oscarsModel.updateUsers(user);
@@ -339,6 +354,9 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 		delete $scope.adjustScores[user.uuid];
 		oscarsModel.updateUsers(user);
 	}
+
+
+
 
 
 
@@ -361,13 +379,62 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 	}
 
 	$scope.totalLossesForUser = function(user) {
-		var calledCategories = _.filter(_.pluck(oscarsModel.categories, "name"), oscarsModel.resultsAnnouncedForCategory);
-		return calledCategories.length - $scope.totalWinsForUser(user);
+
+		// Count up the number of incorrect guesses in the user's picks.
+		var losses = _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
+
+			var category = oscarsModel.categoryNamed(categoryName);
+
+			// First determine if this category was called yet. If not, then skip this one.
+			if (!oscarsModel.categoryWasCalled(category))
+				return memo;
+
+			// If this nominee was not a winner, increment the number of losers.
+			if (!oscarsModel.nomineeNamed(category, nomineeTitle).winner)
+				memo++;
+
+			return memo;
+		}, 0);
+
+		return losses;
 	}
 
 	$scope.totalPicksForUser = function(user) {
 		return _.size(user.picks);
 	}
+
+	$scope.accuracyForUser = function(user) {
+
+		var calledCategories = _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
+		if (calledCategories.length == 0)
+			return "–";
+
+		var wins = this.totalWinsForUser(user);
+		var calledCategoryNames = _.pluck(calledCategories, "name");
+		var pickedCategoryNames = _.keys(user.picks);
+
+		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
+
+		return (wins / calledAndPickedCategories.length).toFixed(3);
+	}
+
+	$scope.confidenceForUser = function(user) {
+		var calledCategories = _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
+		if (calledCategories.length == 0)
+			return "–";
+
+		var calledCategoryNames = _.pluck(calledCategories, "name");
+		var pickedCategoryNames = _.keys(user.picks);
+
+		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
+		return (calledAndPickedCategories.length / calledCategories.length).toFixed(3);
+	}
+
+
+
+
+
+
 
 	// Signal all other clients that voting is about to close, and then automatically lock the account.
 	$scope.startCountdownForCategory = function(category) {

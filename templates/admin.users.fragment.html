@@ -32,8 +32,8 @@
 			<td class="align-center">{{totalLossesForUser(user)}}</td>
 			<td class="align-center">{{totalPicksForUser(user)}}</td>
 			<td class="align-center">{{oscarsModel.categories.length}}</td>
-			<td class="align-center">{{(totalWinsForUser(user) / (totalWinsForUser(user) + totalLossesForUser(user))).toFixed(3)}}</td>
-			<td class="align-center border-right">{{(totalPicksForUser(user) / oscarsModel.categories.length).toFixed(3)}}</td>
+			<td class="align-center">{{accuracyForUser(user)}}</td>
+			<td class="align-center border-right">{{confidenceForUser(user)}}</td>
 
 
 			<td><span class="glyphicon glyphicon-certificate"></span> {{user.score}}</td>
