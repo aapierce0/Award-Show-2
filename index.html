@@ -28,10 +28,23 @@
 
 
 	<!-- The header bar of this web app will contain the logged in user on the left, and the number of coins on the right. -->
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-if="me">
+	<!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-if="me"> -->
+	<nav class="navigation" role="navigation" ng-if="me">
+
 		<div class="container">
-			<div class="navbar-text navbar-left username">{{me.name}}</div>
-			<div class="navbar-text navbar-right score"><span class="glyphicon glyphicon-certificate"></span> {{me.score}}</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<button type="button" class="btn " ng-class="{'btn-link': contentView == 'buzzer', 'btn-primary': contentView == 'categories'}" ng-click="setContentView('categories');">Betting</button>
+					<button type="button" class="btn " ng-class="{'btn-primary': contentView == 'buzzer', 'btn-link': contentView == 'categories'}" ng-click="setContentView('buzzer');">Buzzer</button>
+					
+					<div style="float:right; display:inline-block">
+						<!-- <span class="username">{{me.name}}</span> -->
+						<span class="score"><span class="glyphicon glyphicon-certificate"></span> {{me.score}}</span>
+						<button type="button" class="btn  btn-link">Logout</button>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</nav>
 

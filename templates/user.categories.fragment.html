@@ -9,7 +9,7 @@
 	<div ng-repeat="nominee in category.nominees" class="nominee" ng-class="{selected: (nominee.title == me.picks[category.name]), winner: nominee.winner, loser: oscarsModel.nomineeLost(category, nominee)}" ng-click="selectNominee(category.name, nominee.title)">
 		<span class="title">{{nominee.title}}</span>
 		<span class="subtitle">{{nominee.subtitle}}</span>
-		<div class="users">
+		<div class="users" ng-if="oscarsModel.usersWhoPicked(category.name, nominee.title).length > 0">
 			<span ng-repeat="user in oscarsModel.usersWhoPicked(category.name, nominee.title)" ng-class="{userToken: true, selected: (user.name == me.name)}">{{user.name}}</span>
 		</div>
 	</div>

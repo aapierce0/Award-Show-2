@@ -19,7 +19,7 @@
 					{{nominee.title}} <span class="badge">{{oscarsModel.usersWhoPicked(category.name, nominee.title).length}}</span>
 				</span>
 			</td>
-			<td>{{oscarsModel.usersWhoVoted(category.name).length * category.value}}</td>
+			<td>{{oscarsModel.potForCategory(category)}}</td>
 			<td>
 				<button ng-if="!category.locked" ng-click="startCountdownForCategory(category)">Countdown</button>
 				<button ng-if="!category.locked" ng-click="lockCategory(category)">Lock Now</button>

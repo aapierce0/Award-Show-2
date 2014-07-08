@@ -20,12 +20,22 @@ a {
 }
 
 
-/* Override some bootsrap style */
-#User .navbar-text {
-	display: inline-block;
+#User .navigation {
+
+	position: fixed;
+	padding: 0.5em 0;
+	background-color: #FFF;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
 }
-#User .navbar-right {
-	float: right;
+
+#User .navigation .username,
+#User .navigation .score {
+	vertical-align: middle;
 }
 
 
@@ -63,6 +73,9 @@ a {
 }
 
 #User .category .nominee {
+
+	font-size: 0.9em;
+
 	border: solid 1px #000;
 	background-color: #FFF;
 
@@ -70,23 +83,24 @@ a {
 	display: inline-block;
 	vertical-align: top;
 
-	padding: 1.2em 0.4em;
-	margin: 0.7em 0%;
+	padding: 0.8em 0.4em;
+	margin: 0.3em 0%;
 	width: 100%;
 }
 
 @media (min-width: 768px) {
 
 	#User .category .nominee {
-		padding: 1.2em 0;
+		font-size: 1.0em;
+		padding: 0.7em 0;
 		margin: 1em 2%;
 		width: 45%;
 	}
 }
 
 #User .category .nominee.selected {
-	border-color: blue;
-	color: blue;
+	border-color: #428BCA;
+	color: #428BCA;
 }
 
 #User .category .nominee.winner {
@@ -100,8 +114,17 @@ a {
 }
 
 #User .category .nominee > span {
-	display: block;
+	display: inline;
 	text-align: center;
+
+	margin: 0px 0.2em;
+}
+
+@media (min-width: 768px) {
+	#User .category .nominee > span {
+		display: block;
+		text-align: center;
+	}
 }
 
 #User .category .nominee span.title {
@@ -131,7 +154,7 @@ a {
 #User .category .nominee.selected .users .userToken.selected {
 	color: white;
 	font-weight: bold;
-	background-color: blue;
+	background-color: #428BCA;
 }
 
 #User .category .nominee.selected.winner .users .userToken.selected {
@@ -142,7 +165,19 @@ a {
 	background-color: red;
 }
 
+#User #buzzerCanvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
 
+#User #buzzerFingerprintIcon {
+	display: block;
+	margin: auto;
+
+	position: relative;
+	top: 100%;
+}
 
 
 
@@ -210,7 +245,7 @@ a {
 }
 
 #Admin table.categories tr.category.pickWinner span.nominee {
-	background-color: blue;
+	background-color: #428BCA;
 	color: #FFF;
 }
 
