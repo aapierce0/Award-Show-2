@@ -275,6 +275,41 @@ io.on('connection', function(socket){
 
 
 
+// Buzzer API
+var buzzedUUIDs = [];
+io.on('connection', function(socket) {
+
+	// When a user buzzes in, mark them as buzzed.
+	socket.on("buzzer:buzz", function(userUUID) {
+		buzzedUUIDs.push(userUUID);
+		io.sockets.emit("buzzer:allBuzzes", buzzedUUIDs);
+	});
+
+	socket.on("buzzer:unbuzz", function(userUUID) {
+		buzzedUUIDs = _.without(buzzedUUIDs, userUUID);
+		io.sockets.emit("buzzer:allBuzzes", buzzedUUIDs);
+	});
+
+	socket.on("buzzer:reset", function() {
+		buzzedUUIDs = [];
+		io.sockets.emit("buzzer:allBuzzes", buzzedUUIDs);
+	});
+});
+
+// If the client requests the buzzes, give them the contents of this variable.
+app.get('/config/buzzes.json', function(req, res) {
+	res.json(buzzedUUIDs);
+});
+
+
+
+
+
+
+
+
+
+
 
 
 

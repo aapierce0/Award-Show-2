@@ -37,12 +37,18 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 	var oscarsModel = {};
 
 	// Load the categories and nominees.
-	oscarsModel.getCategories = $http.get("config/categories.json").success(function(data) {
+	oscarsModel.getCategories = $http.get("/config/categories.json").success(function(data) {
 		oscarsModel.categories = data;
 	});
 
-	oscarsModel.getUsers = $http.get("config/users.json").success(function(data) {
+	oscarsModel.getUsers = $http.get("/config/users.json").success(function(data) {
 		oscarsModel.allUsers = data;
+	});
+
+	oscarsModel.getBuzzes = $http.get("/config/buzzes.json").success(function(data) {
+		oscarsModel.buzzedUsers = _.map(data, function(uuid) {
+			return _.findWhere(oscarsModel.allUsers, {uuid:uuid});
+		});;
 	});
 
 
@@ -214,6 +220,37 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		socket.emit("category:update", cleanCategories);
 		oscarsModel.applyCategoryUpdates(categories);
 	}
+
+
+
+
+
+
+	// Capture the list of buzzes
+	socket.on("buzzer:allBuzzes", function(buzzedUUIDs) {
+		oscarsModel.buzzedUsers = _.map(buzzedUUIDs, function(uuid) {
+			return _.findWhere(oscarsModel.allUsers, {uuid:uuid});
+		});
+	});
+
+	oscarsModel.userBuzzed = function(user) {
+		return _.some(oscarsModel.buzzedUsers, function(buzzedUser) {
+			return buzzedUser.uuid == user.uuid;
+		});
+	}
+
+	oscarsModel.buzzUser = function(user) {
+		socket.emit("buzzer:buzz", user.uuid);
+	}
+
+	oscarsModel.unbuzzUser = function(user) {
+		socket.emit("buzzer:unbuzz", user.uuid);
+	}
+
+	oscarsModel.resetAllBuzzes = function(user) {
+		socket.emit("buzzer:reset");
+	}
+
 
 
 
@@ -397,7 +434,14 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 			maxRadius = maxRadius * 1.1;
 			var maxAlpha = 0.3;
 
-			var radiusInset = (timestamp % duration) / (duration/spacing);
+			var adjustedDuration = duration;
+			if ($scope.buzzerState == "submitted") {
+				adjustedDuration /= 4;
+			} else if ($scope.buzzerState == "accepted") {
+				adjustedDuration /= 12;
+			}
+
+			var radiusInset = (timestamp % adjustedDuration) / (adjustedDuration/spacing);
 			var biggestRadius = maxRadius - radiusInset;
 			var thisRadius = biggestRadius;
 
@@ -438,8 +482,8 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 				ctx.fill();
 			}
 
-			var newImgWidth = (fingerprintImg.width/2);
-			var newImgHeight = (fingerprintImg.height/2);
+			var newImgWidth = (fingerprintImg.width/3);
+			var newImgHeight = (fingerprintImg.height/3);
 			drawEllipse(canvasCenterX, canvasCenterY-3, newImgWidth * 1.2, newImgHeight * 1.2);
 
 
@@ -457,6 +501,20 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 	}
 
 	requestAnimationFrame(drawBuzzer);
+
+
+	$scope.buzzerState = "waiting";
+	$scope.activateBuzzer = function() {
+		$scope.buzzerState = "submitted";
+		oscarsModel.buzzUser($scope.me);
+	}
+
+	socket.on("buzzer:allBuzzes", function(buzzedUUIDs) {
+		// If our UUID is not in here, set the state to "waiting"
+		if (!_.contains(buzzedUUIDs, $scope.me.uuid)) {
+			$scope.buzzerState = "waiting";
+		}
+	});
 });
 
 

@@ -19,7 +19,8 @@
 	<tbody>
 		<tr ng-repeat="user in oscarsModel.allUsers">
 			<td>
-				<div class="input-group input-group-sm">
+				<div class="input-group input-group-sm" >
+					<span ng-if="oscarsModel.userBuzzed(user)" class="input-group-addon" ng-click="oscarsModel.unbuzzUser(user)"><span class="glyphicon glyphicon-flash"></span></span>
 					<input type="text" class="form-control" ng-model="user.name">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" ng-click="oscarsModel.updateUsers(user)"><span class="glyphicon glyphicon-floppy-disk"></span></button>

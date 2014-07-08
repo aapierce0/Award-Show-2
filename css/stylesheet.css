@@ -14,11 +14,17 @@ a {
 
 
 
+
+
+
+
+
+
+
 /* Need to account for the title bar */
 #User .main-content {
 	margin-top: 60px;
 }
-
 
 #User .navigation {
 
@@ -169,18 +175,29 @@ a {
 	position: absolute;
 	top: 0;
 	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
-#User #buzzerFingerprintIcon {
-	display: block;
-	margin: auto;
-
-	position: relative;
-	top: 100%;
+#User #buzzerBackground {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
+#User #buzzerBackground.submitted {
+	background-color: #FBFF82;
+}
 
+#User #buzzerBackground.accepted {
+	background-color: #6EF577;
+}
 
+#User #buzzerBackground.rejected {
+	background-color: #FFA27A;
+}
 
 
 
