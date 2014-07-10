@@ -281,4 +281,37 @@ a {
 	font-weight: bold;
 }
 
+#Admin div.triviaQuestions {
+	background-color: #FFF;
+	padding: 3em;
+
+	font-size: 1.2em;
+}
+
+#Admin div.triviaQuestions div.buzzedUsers {
+	float:right;
+	min-width: 20%;
+}
+
+#Admin div.triviaQuestions div.buzzedUsers {
+	float:right;
+	min-width: 20%;
+}
+
+#Admin div.triviaQuestions li.first-user {
+	font-size: 1.2em;
+}
+
+#Admin div.triviaQuestions div.question {
+	display: inline-block;
+}
+
+
+
+
+
+
+
+
+
 

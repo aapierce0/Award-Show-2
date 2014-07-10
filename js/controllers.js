@@ -51,6 +51,10 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		});;
 	});
 
+	oscarsModel.getTriviaQuestions = $http.get("/config/triviaQuestions.json").success(function(data) {
+		oscarsModel.triviaQuestions = data;
+	});
+
 
 
 
@@ -520,6 +524,10 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 		if (!_.contains(buzzedUUIDs, $scope.me.uuid)) {
 			$scope.buzzerState = "waiting";
 		}
+
+		if (_.first(buzzedUUIDs) == $scope.me.uuid) {
+			$scope.buzzerState = "accepted";
+		}
 	});
 });
 
@@ -722,6 +730,27 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 		oscarsModel.updateCategories(category);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+	$scope.setActiveQuestion = function(question) {
+		$scope.activeQuestion = question;
+	}
+
+
+
+
+
+
 });
 
 

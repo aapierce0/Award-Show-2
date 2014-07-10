@@ -1,0 +1,36 @@
+<div class="triviaQuestions container-fluid">
+
+	<!-- List of users that have buzzed in. -->
+	<div class="buzzedUsers col-xs-4">
+		<ul class="list-group">
+			<li class="list-group-item">{{oscarsModel.buzzedUsers.length}} Users Buzzed. <button type="button" class="btn btn-default">Clear All</button></li>
+			<li ng-repeat="user in oscarsModel.buzzedUsers" class="user list-group-item" ng-class="{'first-user':$index == 0}">{{user.name}}
+				<div ng-if="$index == 0">
+					<button type="button" class="btn btn-default correct"><span class="glyphicon glyphicon-ok"></span> Correct</button>
+					<button type="button" class="btn btn-default incorrect"><span class="glyphicon glyphicon-remove"></span> Incorrect</button>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div ng-if="!activeQuestion" class="col-xs-8">
+		<div ng-repeat="triviaQuestion in oscarsModel.triviaQuestions" class="question panel panel-default" ng-class="{asked:triviaQuestion.asked}" ng-click="setActiveQuestion(triviaQuestion)">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{$index+1}}. {{triviaQuestion.category}}</h3>
+			</div>
+		</div>
+	</div>
+
+	<div ng-if="activeQuestion" class="col-xs-8">
+		<div class="question panel panel-default">
+			<div class="panel-heading">
+				{{activeQuestion.category}}
+			</div>
+			<div class="panel-body">
+				Q: {{activeQuestion.question}}
+			</div>
+			<div class="panel-footer">A: {{activeQuestion.answer}}</div>
+		</div>
+		<div><button type="button" class="btn btn-default" ng-click="setActiveQuestion(null)"><span class="glyphicon glyphicon-chevron-left"></span>Back</button></div>
+	</div>
+</div>
