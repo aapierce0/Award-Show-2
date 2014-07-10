@@ -86,47 +86,59 @@ function applyUpdatesToCollection(collection, updates, uniqueKey) {
 
 
 
-// Load the list of categories and nominees.
-var categories;
-var categoriesFile = __dirname + '/config/categories.json';
-if (fs.existsSync(categoriesFile)) {
+function readConfigSync(configIdentifier) {
 
-	// The file exists, so it's time to read it into memory.
-	var categoriesString = fs.readFileSync(categoriesFile, 'utf8');
-	categories = JSON.parse(categoriesString);
-	delete categoriesString; // We're done with the categories string, so we can delete it.
-} else {
+	var configFile = __dirname + "/config/"+configIdentifier+".json";
+	if (!fs.existsSync(configFile)) {
 
-	// The file does not exist. Try the defaults file.
-	var defaultCategoriesFile = __dirname + '/config/categories.default.json';
-	if (fs.existsSync(defaultCategoriesFile)) {
+		// The file does not exists. Try the defaults file.
+		configFile = __dirname + "/config/"+configIdentifier+".default.json";
+		if (!fs.existsSync(configFile)) {
 
-		// The default file exists, so lets read that into memory.
-		var categoriesString = fs.readFileSync(defaultCategoriesFile, 'utf8');
-		categories = JSON.parse(categoriesString);
-		delete categoriesString; // We're done with the categories string, so we can delete it.
-	} else {
-
-		console.log("\n\nERROR: file "+defaultCategoriesFile+" does not exist. The application cannot run without categories and nominees configured.\n\n");
-		return;
+			return undefined;	
+		}
 	}
+
+	// The file exists, so it's time to read it into memory
+	var configString = fs.readFileSync(configFile, "utf8");
+	var result = JSON.parse(configString);
+	delete configString;
+
+	return result;
+}
+
+function writeConfig(jsonData, configIdentifier) {
+	var configFile = __dirname + "/config/"+configIdentifier+".json";
+	fs.writeFile(configFile, JSON.stringify(jsonData, null, 4), function(err) {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log("JSON saved to " + configFile);
+		}
+	});
+}
+
+
+
+
+
+
+
+
+
+// Load the list of categories and nominees.
+var categories = readConfigSync("categories");
+
+// Undefined categories is a fatal error condition. Exit immediately.
+if (!categories) {
+	console.log("\n\nERROR: file "+configFile+" does not exist. You must create this file in order for the application to run properly.\n\n");
+	return;
 }
 
 // If the client requests the categories, give them the contents of this variable.
 app.get('/config/categories.json', function(req, res) {
 	res.json(categories);
 });
-
-// This function will write the category data to disk
-function writeCategories() {
-	fs.writeFile(categoriesFile, JSON.stringify(categories, null, 4), function(err) {
-		if(err) {
-			console.log(err);
-		} else {
-			console.log("JSON saved to " + categoriesFile);
-		}
-	});
-}
 
 
 
@@ -140,21 +152,11 @@ function writeCategories() {
 
 
 // Establish a set of users.
-var users;
-var usersFile = __dirname + '/config/users.json';
-if (fs.existsSync(usersFile)) {
+var users = readConfigSync("users");
 
-	// The file exists, so it's time to read it into memory.
-	var usersString = fs.readFileSync(usersFile, 'utf8');
-	users = JSON.parse(usersString);
-	delete usersString;
-
-} else {
-	
-	// The file does not exist, so make users into an empty object.
-	users = [
-		newUserNamed("Example")
-	];
+// If the file does not exist, make users into an empty array.
+if (!users) {
+	users = [newUserNamed("Example")];
 }
 
 // If the user asks for the users, give them the JSON data from memory.
@@ -163,18 +165,23 @@ app.get('/config/users.json', function(req, res) {
 });
 
 
-// This function will write the users data to disk periodically.
-function writeUsers() {
-	fs.writeFile(usersFile, JSON.stringify(users, null, 4), function(err) {
-		if(err) {
-			console.log(err);
-		} else {
-			console.log("JSON saved to " + usersFile);
-		}
-	});
+
+
+
+
+
+
+// Load the trivia questions.
+var triviaQuestions = readConfigSync("triviaQuestions");
+
+// If the trivia questions do not exist, create an empty for it.
+if (!triviaQuestions) {
+	triviaQuestions = [];
 }
 
-
+app.get('/config/triviaQuestions.json', function(req, res) {
+	res.json(triviaQuestions);
+});
 
 
 
@@ -198,8 +205,7 @@ io.on('connection', function(socket){
 			users.push(newUserNamed(newUser));
 
 			io.sockets.emit("user:update", users);
-
-			writeUsers();
+			writeConfig(users, "users");
 		}
 
 		// Set the active user to this socket.
@@ -221,7 +227,7 @@ io.on('connection', function(socket){
 		applyUpdatesToCollection(users, updateUsers, "uuid");
 
 		socket.broadcast.emit("user:update", updateUsers);
-		writeUsers();
+		writeConfig(users, "users");
 	});
 });
 
@@ -245,7 +251,7 @@ io.on('connection', function(socket){
 		applyUpdatesToCollection(categories, updateCategories, "name");
 
 		socket.broadcast.emit("category:update", updateCategories);
-		writeCategories();
+		writeConfig(categories, "categories");
 	});
 
 
@@ -261,7 +267,7 @@ io.on('connection', function(socket){
 			category.locked = true;
 			io.sockets.emit("category:update", category);
 
-			writeCategories();
+			writeConfig(categories, "categories");
 		}, parameters.secondsDelay /* seconds */ * 1000 /* milliseconds */);
 	});
 });
@@ -300,6 +306,18 @@ io.on('connection', function(socket) {
 app.get('/config/buzzes.json', function(req, res) {
 	res.json(buzzedUUIDs);
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
