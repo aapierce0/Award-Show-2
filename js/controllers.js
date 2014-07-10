@@ -339,6 +339,12 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 		});
 	};
 
+	$scope.logout = function() {
+		delete localStorage["uuid"];
+		$scope.me = undefined;
+		$scope.setContentView("login");
+	}
+
 
 
 
