@@ -51,7 +51,8 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		});;
 	});
 
-	oscarsModel.getTriviaQuestions = $http.get("/config/triviaQuestions.json").success(function(data) {
+	oscarsModel.getTriviaQuestions = $http.get("/config/triviaQuestions.json");
+	oscarsModel.getTriviaQuestions.success(function(data) {
 		oscarsModel.triviaQuestions = data;
 	});
 
@@ -280,7 +281,8 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 
 
-oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache, socket, oscarsModel) {
+oscarsApp.controller("NomineePickerCtrl", 
+		function($scope, $http, $templateCache, socket, oscarsModel) {
 
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
@@ -303,7 +305,8 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 
 
 
-	// When the users are loaded, check the localStorage for a user's UUID, then match it with a 
+	// When the users are loaded, check the localStorage for a user's UUID, then match it with an
+	// existing user
 	oscarsModel.getUsers.success(function(users) {
 		if (localStorage["uuid"]) {
 			
@@ -503,7 +506,9 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 			ctx.globalCompositeOperation = "source-over";
 
 			// The fingerprint image should be scaled down to half size.
-			ctx.drawImage(fingerprintImg, canvasCenterX-(newImgWidth/2), canvasCenterY-(newImgHeight/2), newImgWidth, newImgHeight);
+			var imageOriginX = canvasCenterX-(newImgWidth/2);
+			var imageOriginY = canvasCenterY-(newImgHeight/2)
+			ctx.drawImage(fingerprintImg, imageOriginX, imageOriginY, newImgWidth, newImgHeight);
 
 
 		} else {
@@ -622,7 +627,8 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 		var correctCategories = _.filter(oscarsModel.categories, function(category) {
 			
-			// Find the winners for this category (there might be more than one, in the case of a tie)
+			// Find the winners for this category
+			// (there might be more than one, in the case of a tie)
 			var winners = _.where(category.nominees, {winner: true});
 
 			// If one of these winners was picked by the user, then it was a win.
@@ -692,7 +698,8 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 
 
-	// Signal all other clients that voting is about to close, and then automatically lock the account.
+	// Signal all other clients that voting is about to close, 
+	// and then automatically lock the account.
 	$scope.startCountdownForCategory = function(category) {
 		socket.emit("category:startCountdown", {categoryName: category.name, secondsDelay: 5});
 	}

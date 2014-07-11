@@ -131,7 +131,8 @@ var categories = readConfigSync("categories");
 
 // Undefined categories is a fatal error condition. Exit immediately.
 if (!categories) {
-	console.log("\n\nERROR: file "+configFile+" does not exist. You must create this file in order for the application to run properly.\n\n");
+	console.log("\n\nERROR: file "+configFile+" does not exist. "+
+		"You must create this file in order for the application to run properly.\n\n");
 	return;
 }
 
@@ -257,7 +258,8 @@ io.on('connection', function(socket){
 
 	socket.on("category:startCountdown", function(parameters) {
 
-		console.log("Counting down for "+parameters.categoryName+". Locking in "+parameters.secondsDelay+" seconds.");
+		console.log("Counting down for "+parameters.categoryName+". "+
+			"Locking in "+parameters.secondsDelay+" seconds.");
 
 		// Find the category with this name.
 		var category = _.findWhere(categories, {name: parameters.categoryName});
