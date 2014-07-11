@@ -125,6 +125,10 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		});
 	};
 
+	oscarsModel.calledOutCategory = function() {
+		return _.findWhere(oscarsModel.categories, {calledOut: true});
+	}
+
 	oscarsModel.nomineeLost = function(category, nominee) {
 		// If any nominee in this category won other than the selected one, then they are a loser.
 		return !nominee.winner && _.some(category.nominees, function(someNominee) {
@@ -287,13 +291,8 @@ oscarsApp.controller("NomineePickerCtrl",
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
 
-	// cache the categories view
-	$http.get("templates/categories.fragment.html", {cache:$templateCache});
-
 	// This function is just a convenient way to load a template in the main view.
 	$scope.setContentView = function(contentView) {
-		console.log("Changing content to ... "+contentView);
-
 		$scope.contentURL = "templates/user."+contentView+".fragment.html";
 		$scope.contentView = contentView;
 	}
@@ -423,9 +422,6 @@ oscarsApp.controller("NomineePickerCtrl",
 	var canvasResized = false;
 	var fingerprintImg = new Image();
 	fingerprintImg.src = "/img/fingerprint-256.png";
-	fingerprintImg.onload = function() {
-		console.log("Fingerprint loaded");
-	}
 
 	function drawBuzzer(timestamp) {
 
@@ -697,6 +693,42 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 
 
+
+
+
+	$scope.calloutCategory = function(category) {
+		// If this category is already called out, do nothing.
+		if (category.calledOut) {
+			return;
+		}
+
+		// We might need to update more than one category. Create an array to hold them.
+		var updateCategories = [];
+
+		// Find the a category that is already called out, if any.
+		var calledOutCategory = _.findWhere(oscarsModel.categories, {calledOut: true});
+		if (calledOutCategory) {
+
+			// Set this category to not be called out.
+			calledOutCategory.calledOut = false;
+			updateCategories.push(calledOutCategory);
+		}
+
+		// Set this category to be called out, and 
+		category.calledOut = true;
+		updateCategories.push(category);
+
+		oscarsModel.updateCategories(updateCategories);
+	}
+
+	$scope.resetCallout = function() {
+		var calledOutCategories = _.where(oscarsModel.categories, {calledOut: true});
+		_.each(calledOutCategories, function(category) {
+			category.calledOut = false;
+		});
+		
+		oscarsModel.updateCategories(calledOutCategories);
+	}
 
 	// Signal all other clients that voting is about to close, 
 	// and then automatically lock the account.

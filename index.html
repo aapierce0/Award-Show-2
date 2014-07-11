@@ -31,8 +31,8 @@
 	<!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-if="me"> -->
 	<nav class="navigation" role="navigation" ng-if="me">
 
-		<div class="container">
-			<div class="row">
+		<div class="container-fluid">
+			<div class="row main-toolbar">
 				<div class="col-xs-12">
 					<button type="button" class="btn " ng-class="{'btn-link': contentView == 'buzzer', 'btn-primary': contentView == 'categories'}" ng-click="setContentView('categories');">Betting</button>
 					<button type="button" class="btn " ng-class="{'btn-primary': contentView == 'buzzer', 'btn-link': contentView == 'categories'}" ng-click="setContentView('buzzer');">Buzzer</button>
@@ -43,7 +43,12 @@
 						<button type="button" class="btn  btn-link" ng-click="logout()">Logout</button>
 					</div>
 				</div>
+			</div>
 
+			<div class="row" ng-if="oscarsModel.calledOutCategory()">
+				<div class="col-xs-12">
+					<div class="category-callout"><span class="marquee">Vote now for <strong>{{oscarsModel.calledOutCategory().name}}</strong>!</span></div>
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -53,7 +58,7 @@
 
 
 	<!-- This is the template for each category of votes. -->
-	<div class="container main-content" ng-include="contentURL"></div>
+	<div class="container-fluid main-content" ng-include="contentURL"></div>
 
 
 

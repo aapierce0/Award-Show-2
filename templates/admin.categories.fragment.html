@@ -11,8 +11,11 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="category in oscarsModel.categories" class="category" ng-class="{locked: category.locked, pickWinner:acceptWinner[category.name]}">
-			<td><span class="glyphicon glyphicon-star" ng-if="category.distinguished"></span> {{category.name}}</td>
-			<td><span class="glyphicon glyphicon-lock" ng-if="category.locked"></span><span ng-if="(oscarsModel.timeRemainingForCategory(category) > 0)">{{oscarsModel.timeRemainingForCategory(category)}}</span></td>
+			<td>
+				<span ng-if="category.calledOut" class="glyphicon glyphicon-bullhorn"></span>
+				<span ng-if="category.distinguished" class="glyphicon glyphicon-star"></span>
+				{{category.name}}</td>
+			<td><span ng-if="category.locked" class="glyphicon glyphicon-lock"></span><span ng-if="(oscarsModel.timeRemainingForCategory(category) > 0)">{{oscarsModel.timeRemainingForCategory(category)}}</span></td>
 			<td>{{category.value}}</td>
 			<td>
 				<span ng-repeat="nominee in category.nominees" class="nominee" ng-class="{winner: nominee.winner}" ng-click="pickWinner(category, nominee)">
@@ -20,12 +23,15 @@
 				</span>
 			</td>
 			<td>{{oscarsModel.potForCategory(category)}}</td>
-			<td>
-				<button ng-if="!category.locked" ng-click="startCountdownForCategory(category)">Countdown</button>
-				<button ng-if="!category.locked" ng-click="lockCategory(category)">Lock Now</button>
+			<td class="category-controls">
+				<button class="btn btn-default" type="button" ng-if="!category.locked" ng-click="startCountdownForCategory(category)">Countdown</button>
+				<button class="btn btn-default" type="button" ng-if="!category.locked" ng-click="lockCategory(category)">Lock Now</button>
 
-				<button ng-if="category.locked" ng-click="prepareForWinnerSelection(category)">Choose Winner</button>
-				<button ng-if="category.locked" ng-click="unlockCategory(category)">Unlock</button>
+				<button class="btn btn-default" type="button" ng-if="category.locked" ng-click="prepareForWinnerSelection(category)">Choose Winner</button>
+				<button class="btn btn-default" type="button" ng-if="category.locked" ng-click="unlockCategory(category)">Unlock</button>
+
+				<button class="btn btn-default" type="button" ng-if="!category.calledOut" ng-click="calloutCategory(category)">Callout</button>
+				<button class="btn btn-default" type="button" ng-if="category.calledOut" ng-click="resetCallout()">Clear Callout</button>
 			</td>
 		</tr>
 	</tbody>
