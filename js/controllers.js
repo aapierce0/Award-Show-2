@@ -251,10 +251,13 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		socket.emit("buzzer:unbuzz", user.uuid);
 	}
 
-	oscarsModel.resetAllBuzzes = function(user) {
+	oscarsModel.resetAllBuzzes = function() {
 		socket.emit("buzzer:reset");
 	}
 
+	oscarsModel.unbuzzedUsers = function() {
+		return _.difference(oscarsModel.allUsers, oscarsModel.buzzedUsers);
+	}
 
 
 
@@ -744,6 +747,16 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 	$scope.setActiveQuestion = function(question) {
 		$scope.activeQuestion = question;
+	}
+
+	$scope.userCorrect = function(user) {
+		// Add some score to the user (eventually)
+		oscarsModel.resetAllBuzzes();
+	}
+
+	$scope.userIncorrect = function(user) {
+		// User loses a turn.
+		oscarsModel.unbuzzUser(user);
 	}
 
 

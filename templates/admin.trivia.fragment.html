@@ -2,14 +2,27 @@
 
 	<!-- List of users that have buzzed in. -->
 	<div class="buzzedUsers col-xs-4">
+		<div style="margin-bottom: 0.5em;">{{oscarsModel.buzzedUsers.length}} Users Buzzed. <button type="button" class="btn btn-default" ng-click="oscarsModel.resetAllBuzzes()">Clear All</button></div>
 		<ul class="list-group">
-			<li class="list-group-item">{{oscarsModel.buzzedUsers.length}} Users Buzzed. <button type="button" class="btn btn-default">Clear All</button></li>
+
+			<li ng-if="oscarsModel.buzzedUsers.length == 0" class="list-group-item disabled">None</li>
+
 			<li ng-repeat="user in oscarsModel.buzzedUsers" class="user list-group-item" ng-class="{'first-user':$index == 0}">{{user.name}}
-				<div ng-if="$index == 0">
-					<button type="button" class="btn btn-default correct"><span class="glyphicon glyphicon-ok"></span> Correct</button>
-					<button type="button" class="btn btn-default incorrect"><span class="glyphicon glyphicon-remove"></span> Incorrect</button>
+				<div ng-if="$index == 0" style="margin-top: 0.5em;">
+					<button type="button" class="btn btn-default correct" ng-click="userCorrect(user)"><span class="glyphicon glyphicon-ok"></span> Correct</button>
+					<button type="button" class="btn btn-default incorrect" ng-click="userIncorrect(user)"><span class="glyphicon glyphicon-remove"></span> Incorrect</button>
 				</div>
 			</li>
+		</ul>
+
+
+		<div style="margin-bottom: 0.5em;">{{oscarsModel.unbuzzedUsers().length}} Users have not buzzed.</div>
+
+		<ul class="list-group">
+
+			<li ng-if="oscarsModel.unbuzzedUsers().length == 0" class="list-group-item disabled">None</li>
+
+			<li ng-repeat="user in oscarsModel.unbuzzedUsers()" class="user list-group-item">{{user.name}}</li>
 		</ul>
 	</div>
 

@@ -302,8 +302,23 @@ a {
 	font-size: 1.2em;
 }
 
+#Admin div.triviaQuestions li.disabled {
+	color: #888;
+	background-color: #EEE;
+}
+
 #Admin div.triviaQuestions div.question {
 	display: inline-block;
+}
+
+#Admin div.triviaQuestions button.correct {
+	color: white;
+	background-color: #76D66B;
+}
+
+#Admin div.triviaQuestions button.incorrect {
+	color: white;
+	background-color: #FC4F4C;
 }
 
 
