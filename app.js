@@ -1,3 +1,11 @@
+PORT_NUMBER = 3000;
+
+if (typeof String.prototype.startsWith != 'function') {
+	String.prototype.startsWith = function (str){
+		return this.lastIndexOf(str, 0) === 0;
+	};
+}
+
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -6,6 +14,10 @@ var fs = require('fs');
 
 var _ = require('underscore');
 var uuid = require('node-uuid');
+
+
+
+
 
 // Safari has a bug where it won't reload the right page.
 app.get('/*', function(req, res, next){ 
@@ -334,8 +346,53 @@ app.get('/config/buzzes.json', function(req, res) {
 
 
 // Fire up the web server.
-http.listen(3000, function(){
-	console.log('listening on *:3000');
+http.listen(PORT_NUMBER, function(){
+
+	// This logs all the IPs available on the current device.
+	var os=require('os');
+	var ifaces=os.networkInterfaces();
+	var voterURL = "";
+	var networkURLs = [];
+	networkURLs.push("http://localhost:"+PORT_NUMBER);
+	for (var dev in ifaces) {
+		var alias=0;
+		ifaces[dev].forEach(function(details){
+			if (details.family=='IPv4') {
+				++alias;
+
+				var thisURL = "http://"+details.address+":"+PORT_NUMBER;
+				networkURLs.push(thisURL);
+
+				if (details.address.startsWith("192")) {
+					voterURL = thisURL;
+				}
+			}
+		});
+	}
+
+	// =========================
+	// Welcome message
+	console.log("");
+	console.log("The Oscars app is now running locally on port "+PORT_NUMBER+".");
+	console.log("");
+	console.log("Point your browser to one of these URLS to try it out:");
+	networkURLs.forEach(function(urlString) {
+		console.log("    "+urlString);
+	});
+	console.log("");
+
+	console.log("The admin site is available at one of these URLs:");
+	networkURLs.forEach(function(urlString) {
+		console.log("    "+urlString+"/admin");
+	});
+	console.log("");
+
+	console.log("The TV site is available at one of these URLs:");
+	networkURLs.forEach(function(urlString) {
+		console.log("    "+urlString+"/tv");
+	});
+	console.log("");
+
 });
 
 
