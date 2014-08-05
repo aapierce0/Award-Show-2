@@ -145,6 +145,21 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		return (oscarsModel.potForCategory(category) / voters.length);
 	}
 
+	oscarsModel.winningsForUser = function(user) {
+
+		return _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
+			var category = oscarsModel.categoryNamed(categoryName);
+			var nominee = oscarsModel.nomineeNamed(category, nomineeTitle);
+
+			if (nominee.winner) {
+				return memo + oscarsModel.payoutForCategory(category) - category.value;
+			} else {
+				return memo - category.value;
+			}
+
+		}, 0);
+	}
+
 	oscarsModel.payoutForUser = function(user) {
 
 		return _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
@@ -158,6 +173,10 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 			}
 
 		}, 0);
+	}
+
+	oscarsModel.balanceForUser = function(user) {
+		return user.score + oscarsModel.payoutForUser(user);
 	}
 
 
