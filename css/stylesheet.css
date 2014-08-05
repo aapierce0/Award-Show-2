@@ -77,7 +77,11 @@ span.marquee {
 
 /* Need to account for the title bar */
 #User .main-content {
-	margin-top: 60px;
+	margin-top: 80px;
+}
+
+#User.webapp .main-content {
+	margin-top: 100px;
 }
 
 #User .navigation {
@@ -95,6 +99,9 @@ span.marquee {
 #User .navigation div.row.main-toolbar {
 	margin-top: 0.5em;
 }
+#User.webapp .navigation {
+	padding-top: 1.2em;
+}
 #User .navigation div.row.main-toolbar:last-child {
 	margin-bottom: 0.5em;
 } 
@@ -104,15 +111,20 @@ span.marquee {
 	vertical-align: middle;
 }
 
-#User .navigation div.category-callout {
+#User .navigation div.category-callout,
+#User .navigation div.category-callout-return {
 	border-radius: 4px;
 	text-align: center;
-	background-color: rgb(41, 198, 2);
-	color: white;
 
 	margin: 0.3em 0;
 	padding: 0.2em 0;
-	height: 1.7em;
+	height: 1.8em;
+}
+
+#User .navigation div.category-callout {
+	border: solid 1px rgba(255, 255, 255, 0.5);
+	background-color: rgb(41, 198, 2);
+	color: white;
 
 	-webkit-animation: green-glow 1s infinite alternate both; /* Safari 4+ */
 	-moz-animation:    green-glow 1s infinite alternate both; /* Fx 5+ */
@@ -122,6 +134,10 @@ span.marquee {
 
 #User .navigation div.category-callout strong {
 	text-transform: uppercase;
+}
+
+#User .navigation div.category-callout-return {
+	border: solid 1px rgba(0, 0, 0, 0.5);
 }
 
 

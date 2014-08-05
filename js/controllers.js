@@ -291,6 +291,12 @@ oscarsApp.controller("NomineePickerCtrl",
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
 
+	$scope.webapp = window.navigator.standalone;
+	if (window.navigator.standalone) {
+		var statusBarStyleMetaTag = document.getElementById("status-bar-style");
+		statusBarStyleMetaTag.parentNode.removeChild(statusBarStyleMetaTag);
+	}
+
 	// This function is just a convenient way to load a template in the main view.
 	$scope.setContentView = function(contentView) {
 		$scope.contentURL = "templates/user."+contentView+".fragment.html";
@@ -360,7 +366,13 @@ oscarsApp.controller("NomineePickerCtrl",
 
 
 
+	$scope.setFocusedCategory = function(category) {
+		$scope.focusedCategory = category;
+	}
 
+	$scope.unsetFocusedCategory = function() {
+		$scope.focusedCategory = undefined;
+	}
 
 	// Categories screen
 	$scope.selectNominee = function(category, nominee) {

@@ -18,12 +18,16 @@
 	<script type="text/javascript" src="/js/controllers.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
 
-
+	<!-- Optimize for Mobile Screens -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<!-- Safari web app config -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" id="status-bar-style">
 
 </head>
 
-<body ng-controller="NomineePickerCtrl" id="User">
+<body ng-controller="NomineePickerCtrl" id="User" ng-class="{'webapp':webapp}">
 
 
 
@@ -45,9 +49,15 @@
 				</div>
 			</div>
 
-			<div class="row" ng-if="oscarsModel.calledOutCategory()">
+			<div class="row" ng-if="oscarsModel.calledOutCategory() && !focusedCategory">
 				<div class="col-xs-12">
-					<div class="category-callout"><span class="marquee">Vote now for <strong>{{oscarsModel.calledOutCategory().name}}</strong>!</span></div>
+					<div class="category-callout" ng-click="setFocusedCategory(oscarsModel.calledOutCategory())"><span class="marquee">Vote now for <strong>{{oscarsModel.calledOutCategory().name}}</strong>!</span></div>
+				</div>
+			</div>
+
+			<div class="row" ng-if="focusedCategory">
+				<div class="col-xs-12">
+					<div class="category-callout-return" ng-click="unsetFocusedCategory()">Show All Categories</div>
 				</div>
 			</div>
 		</div>

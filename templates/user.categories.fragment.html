@@ -1,4 +1,4 @@
-<div ng-repeat="category in oscarsModel.categories" class="category" ng-class="{locked: category.locked}">
+<div ng-repeat="category in oscarsModel.categories | filter : {name: focusedCategory.name}" class="category" ng-class="{locked: category.locked}">
 	<div class="category-name">{{category.name}}
 		<span class="glyphicon glyphicon-lock" ng-if="category.locked"></span>
 	</div>
