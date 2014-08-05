@@ -148,6 +148,17 @@ if (!categories) {
 	return;
 }
 
+// Loop through the list of categories and make sure the values are set appropriately.
+_.each(categories, function(category) {
+	_.defaults(category, {distinguished: false, votingActive: false, value: 25, locked: false});
+
+	// Loop through the nominees, and make sure each one defaults to "winner: false"
+	_.each(category.nominees, function(nominee) {
+		_.defaults(nominee, {winner: false});
+	});
+});
+writeConfig(categories, "categories");
+
 // If the client requests the categories, give them the contents of this variable.
 app.get('/config/categories.json', function(req, res) {
 	res.json(categories);
