@@ -160,8 +160,9 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		}, 0);
 	}
 
-	oscarsModel.payoutForUser = function(user) {
 
+	// This is the total amount of money a user won or lost.
+	oscarsModel.payoutForUser = function(user) {
 		return _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
 			var category = oscarsModel.categoryNamed(categoryName);
 			var nominee = oscarsModel.nomineeNamed(category, nomineeTitle);
@@ -175,6 +176,8 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		}, 0);
 	}
 
+
+	// This method tells us how much the user is owed from the bank
 	oscarsModel.balanceForUser = function(user) {
 		return user.score + oscarsModel.payoutForUser(user);
 	}
