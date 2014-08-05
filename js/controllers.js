@@ -145,6 +145,9 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		return (oscarsModel.potForCategory(category) / voters.length);
 	}
 
+
+
+	// This value is strictly how much money the user won.
 	oscarsModel.winningsForUser = function(user) {
 
 		return _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
@@ -152,9 +155,9 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 			var nominee = oscarsModel.nomineeNamed(category, nomineeTitle);
 
 			if (nominee.winner) {
-				return memo + oscarsModel.payoutForCategory(category) - category.value;
+				return memo + oscarsModel.payoutForCategory(category);
 			} else {
-				return memo - category.value;
+				return memo;
 			}
 
 		}, 0);
@@ -162,7 +165,7 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 
 	// This is the total amount of money a user won or lost.
-	oscarsModel.payoutForUser = function(user) {
+	oscarsModel.netIncomeForUser = function(user) {
 		return _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
 			var category = oscarsModel.categoryNamed(categoryName);
 			var nominee = oscarsModel.nomineeNamed(category, nomineeTitle);
@@ -179,7 +182,7 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 	// This method tells us how much the user is owed from the bank
 	oscarsModel.balanceForUser = function(user) {
-		return user.score + oscarsModel.payoutForUser(user);
+		return user.buyIn + oscarsModel.netIncomeForUser(user);
 	}
 
 
@@ -397,17 +400,22 @@ oscarsApp.controller("NomineePickerCtrl",
 	}
 
 	// Categories screen
-	$scope.selectNominee = function(category, nominee) {
+	$scope.selectNominee = function(categoryName, nominee) {
 
 		// Test to see if the category is locked. If so, the user cannot change their vote.
-		if (oscarsModel.categoryNamed(category).locked)
+		var category = oscarsModel.categoryNamed(categoryName);
+		if (category.locked)
+			return;
+
+		// If this user hasn't selected a nominee here, and they can't afford to bet, then they cannot vote.
+		if (!$scope.me.picks[categoryName] && category.value > oscarsModel.balanceForUser($scope.me))
 			return;
 
 		// If the user already selected this nominee, then this click should unselect it.
-		if ($scope.me.picks[category] == nominee) {
-			delete $scope.me.picks[category];
+		if ($scope.me.picks[categoryName] == nominee) {
+			delete $scope.me.picks[categoryName];
 		} else {
-			$scope.me.picks[category] = nominee;
+			$scope.me.picks[categoryName] = nominee;
 		}
 
 		oscarsModel.updateUsers($scope.me);
@@ -635,13 +643,13 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 	$scope.adjustScores = {};
 
 	$scope.addScore = function(user) {
-		user.score += parseInt($scope.adjustScores[user.uuid]);
+		user.buyIn += parseInt($scope.adjustScores[user.uuid]);
 		delete $scope.adjustScores[user.uuid];
 		oscarsModel.updateUsers(user);
 	}
 
 	$scope.subtractScore = function(user) {
-		user.score -= parseInt($scope.adjustScores[user.uuid]);
+		user.buyIn -= parseInt($scope.adjustScores[user.uuid]);
 		delete $scope.adjustScores[user.uuid];
 		oscarsModel.updateUsers(user);
 	}
@@ -706,6 +714,8 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 		var pickedCategoryNames = _.keys(user.picks);
 
 		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
+		if (calledAndPickedCategories.length == 0)
+			return "–";
 
 		return (wins / calledAndPickedCategories.length).toFixed(3);
 	}
@@ -719,6 +729,7 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 		var pickedCategoryNames = _.keys(user.picks);
 
 		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
+
 		return (calledAndPickedCategories.length / calledCategories.length).toFixed(3);
 	}
 

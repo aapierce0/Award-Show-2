@@ -58,7 +58,7 @@ function newUserNamed(username) {
 		"name":username,
 		"picks":{},
 		"braggingRights":0,
-		"score":0,
+		"buyIn":0,
 		"uuid":uuid.v4()
 	}
 }
