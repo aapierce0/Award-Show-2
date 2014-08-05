@@ -180,7 +180,7 @@ var users = readConfigSync("users");
 
 // If the file does not exist, make users into an empty array.
 if (!users) {
-	users = [newUserNamed("Example")];
+	users = [];
 }
 
 // If the user asks for the users, give them the JSON data from memory.
