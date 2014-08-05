@@ -11,7 +11,10 @@
 
 
 
-			<th colspan="3">Score</th>
+			<th></th>
+			<th>Buy In</th>
+			<th>NI</th>
+			<th>Bal.</th>
 			<th class="uuid border-left">UUID</th>
 		</tr>
 	</thead>
@@ -35,7 +38,6 @@
 			<td class="align-center border-right">{{confidenceForUser(user)}}</td>
 
 
-			<td><span class="glyphicon glyphicon-certificate"></span> {{user.score}}</td><td> {{oscarsModel.payoutForUser(user)}}</td>
 
 			<!-- Control User scores -->
 			<td>
@@ -47,6 +49,9 @@
 					</span>
 				</div>
 			</td>
+
+			<td><span class="glyphicon glyphicon-certificate"></span> {{user.buyIn}}</td><td>{{oscarsModel.netIncomeForUser(user)}}</td><td>{{oscarsModel.balanceForUser(user)}}</td>
+
 
 
 			<td class="uuid border-left">{{user.uuid}}</td>
