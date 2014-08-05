@@ -6,7 +6,6 @@
 			<th class="align-center border-left">W</th><!-- Wins -->
 			<th class="align-center">L</th><!-- Losses -->
 			<th class="align-center">P</th><!-- Picks -->
-			<th class="align-center">T</th><!-- Total Categories -->
 			<th class="align-center">Acc.</th><!-- Accuracy = W / (W + L) -->
 			<th class="align-center border-right">Conf.</th><!-- Confidence = P / T -->
 
@@ -32,7 +31,6 @@
 			<td class="align-center border-left">{{totalWinsForUser(user)}}</td>
 			<td class="align-center">{{totalLossesForUser(user)}}</td>
 			<td class="align-center">{{totalPicksForUser(user)}}</td>
-			<td class="align-center">{{oscarsModel.categories.length}}</td>
 			<td class="align-center">{{accuracyForUser(user)}}</td>
 			<td class="align-center border-right">{{confidenceForUser(user)}}</td>
 
