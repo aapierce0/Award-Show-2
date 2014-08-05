@@ -316,8 +316,20 @@ span.marquee {
 	margin-left: 2em;
 }
 
+#Admin div.main-content {
+	background-color: #FFF;
+	border-bottom: solid 1px #DDD;
+}
+
+#Admin div.login {
+	padding-bottom: 2em;
+}
+
+
+
 #Admin table.table {
 	background-color: #FFF;
+	margin-bottom: 0;
 }
 
 #Admin table.table.users {

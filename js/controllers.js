@@ -601,6 +601,8 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
+
+	
 });
 
 
@@ -621,6 +623,7 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 
 oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
+
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
 
@@ -629,12 +632,31 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 	// change the winner of a category.
 	$scope.acceptWinner = {};
 
+	
+
 	$scope.setSelectedTab = function(tabSelection) {
 		$scope.contentURL = "templates/admin."+tabSelection+".fragment.html";
 		$scope.selectedTab = tabSelection;
+
+		// If the user tapped the login button, disable the 
+		if (tabSelection == "login") {
+			$scope.authenticationFailure = false;
+			$scope.authenticated = false;
+		}
 	}
 
-	$scope.setSelectedTab("users");
+	
+	$scope.setSelectedTab("login");
+
+
+	$scope.passwordSubmit = function(passwordAttempt) {
+		if (passwordAttempt == "kevinspacey") {
+			$scope.authenticated = true;
+			$scope.setSelectedTab("users");
+		} else {
+			$scope.authenticationFailure = true;
+		}
+	}
 
 
 

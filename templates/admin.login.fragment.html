@@ -1,0 +1,16 @@
+<div class="login">
+	<form ng-submit="passwordSubmit(passwordInput); passwordInput = ''">
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+				<h3>Enter Administrator Password</h3>
+				<div class="input-group">
+					<input type="password" placeholder="Password" ng-model="passwordInput" ng-disabled="loginDisabled" class="form-control" />
+					<span class="input-group-btn">
+						<input type="submit" value="Submit" ng-disabled="loginDisabled" class="btn btn-default" />
+					</span>
+				</div>
+				<p style="color:red" ng-if="authenticationFailure">Incorrect Password...</p>
+			</div>
+		</div>
+	</form>
+</div>
