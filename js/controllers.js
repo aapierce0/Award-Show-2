@@ -602,7 +602,10 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
 
-	
+	$scope.qrcode = new QRCode("qrcode");
+	socket.on("tv:QRString", function(qrString) {
+		$scope.qrcode.makeCode(qrString);
+	});
 });
 
 
