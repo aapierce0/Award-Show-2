@@ -1,0 +1,73 @@
+<h1>Setup</h1>
+<div class="setup">
+	<div class="row">
+		<div class="col-md-6">
+
+			<!-- Network name and password -->
+			<div class="panel panel-default">
+
+				<div class="panel-heading">
+					<h3 class="panel-title">Step 1: Connect to local network.</h3>
+				</div>
+
+				<table class="table">
+					<tbody>
+						<tr>
+							<th>Network Name</th>
+							<td>{{networkSSID}}</td>
+						</tr>
+						<tr>
+							<th>Password</th>
+							<td>{{networkPassword}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+			<!-- List of network URLs to show in TV QR code -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Step 2: Load the web app on your phone.</h3>
+				</div>
+				<div class="panel-body qrcode-body">
+					<p>{{setupURL}}</p>
+					<div id="qrcode"></div>
+				</div>
+			</div>
+		</div>
+
+
+		
+		<div class="col-md-6">
+
+			<!-- List of Users with their score -->
+			<div class="panel panel-default">
+
+				<div class="panel-heading">
+					<h3 class="panel-title">Step 3: Create account with your phone.</h3>
+				</div>
+
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="user in oscarsModel.allUsers">
+						<span class="username">{{user.name}}</span>
+						<span class="userScore"><span class="glyphicon glyphicon-certificate"></span>  {{oscarsModel.balanceForUser(user)}}</span>
+					</li>
+				</ul>
+			</div>
+
+
+			<!-- Take money to cashier -->
+			<div class="panel panel-default">
+
+				<div class="panel-heading">
+					<h3 class="panel-title">Step 4: Buy tokens at the cashier.</h3>
+				</div>
+
+				<div class="panel-body">
+					<h1 class="exchangeMethod"><span class="glyphicon glyphicon-usd"></span>1 = <span class="glyphicon glyphicon-certificate"></span>100</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -369,6 +369,10 @@ span.marquee {
 	}
 }
 
+
+
+
+
 #Admin table.categories tr.category.pickWinner span.nominee {
 	background-color: #428BCA;
 	color: #FFF;
@@ -392,6 +396,11 @@ span.marquee {
 #Admin table.categories td.category-controls {
 	white-space: nowrap;
 }
+
+
+
+
+
 
 #Admin div.triviaQuestions {
 	background-color: #FFF;
@@ -438,6 +447,45 @@ span.marquee {
 
 
 
+
+#Admin div.tv div.row {
+	margin-bottom: 1em;
+}
+
+
+
+
+
+#TV {
+	font-size: 2em;
+}
+
+#TV .qrcode-body {
+	text-align: center;
+}
+
+#TV #qrcode {
+	display: inline-block;
+}
+
+#TV .userScore {
+	display: inline-block;
+	float: right;
+}
+
+#TV .exchangeMethod {
+	font-size: 2.2em;
+	text-align: center;
+	margin: 0;
+}
+
+#TV .exchangeMethod .glyphicon-usd {
+	color: green;
+}
+
+#TV .exchangeMethod .glyphicon {
+	font-size: 0.8em;
+}
 
 
 

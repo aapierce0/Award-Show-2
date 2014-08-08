@@ -8,7 +8,7 @@ var oscarsApp = angular.module("Oscars", ["ngTouch"]);
 
 
 
-
+// Socket IO for Angular JS
 oscarsApp.factory('socket', function ($rootScope) {
 	var socket = io.connect();
 	return {
@@ -33,6 +33,14 @@ oscarsApp.factory('socket', function ($rootScope) {
 	};
 });
 
+
+
+
+
+
+
+
+// Oscars API
 oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 	var oscarsModel = {};
 
@@ -50,6 +58,8 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 			return _.findWhere(oscarsModel.allUsers, {uuid:uuid});
 		});;
 	});
+
+	oscarsModel.getNetworkURLs = $http.get("/networkURLs.json");
 
 	oscarsModel.getTriviaQuestions = $http.get("/config/triviaQuestions.json");
 	oscarsModel.getTriviaQuestions.success(function(data) {
@@ -291,8 +301,29 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 
 
+	// TV API
+	oscarsModel.setTVQRString = function(QRString) {
+		socket.emit("tv:QRString", QRString);
+	}
+
+	oscarsModel.setTVViewName = function(viewName) {
+		socket.emit("tv:viewName", viewName);
+	}
+
+	oscarsModel.setTVNetworkInfo = function(ssid, password) {
+		socket.emit("tv:networkInfo", {SSID: ssid, password: password});
+	}
+
+
+
 	return oscarsModel;
 });
+
+
+
+
+
+
 
 
 
@@ -602,9 +633,41 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
 
-	$scope.qrcode = new QRCode("qrcode");
+	$scope.setSelectedView = function(viewName) {
+		$scope.viewName = viewName;
+		$scope.contentURL = "templates/tv."+viewName+".fragment.html";
+	}
+
+	$scope.setSelectedView("setup");
+
+
+	$scope.renderQRCode = function() {
+		if ($scope.qrcode) {
+			$scope.qrcode.makeCode($scope.setupURL);
+		}
+	}
+
+	$scope.$on("$includeContentLoaded", function() {
+		if (document.getElementById("qrcode")) {
+			$scope.qrcode = new QRCode("qrcode");
+			$scope.renderQRCode();
+		} else {
+			delete $scope.qrcode;
+		}
+	});
+
 	socket.on("tv:QRString", function(qrString) {
-		$scope.qrcode.makeCode(qrString);
+		$scope.setupURL = qrString;
+		$scope.renderQRCode();
+	});
+
+	socket.on("tv:viewName", function(viewName) {
+		$scope.setSelectedView(viewName);
+	});
+
+	socket.on("tv:networkInfo", function(networkInfo) {
+		$scope.networkSSID = networkInfo.SSID;
+		$scope.networkPassword = networkInfo.password;
 	});
 });
 
@@ -660,6 +723,7 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 			$scope.authenticationFailure = true;
 		}
 	}
+
 
 
 
@@ -872,6 +936,14 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 
 
+
+
+
+
+	// Get the list of networkURLs for the TV controller
+	oscarsModel.getNetworkURLs.success(function(networkURLs) {
+		$scope.networkURLs = networkURLs;
+	});
 
 });
 

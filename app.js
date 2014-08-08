@@ -341,7 +341,22 @@ app.get('/config/buzzes.json', function(req, res) {
 
 
 
+// TV API
+io.on('connection', function(socket) {
 
+	// When we receive an event to change the TV view rebroadcast it.
+	socket.on("tv:QRString", function(QRString) {
+		io.sockets.emit("tv:QRString", QRString);
+	});
+
+	socket.on("tv:viewName", function(viewName) {
+		io.sockets.emit("tv:viewName", viewName);
+	});
+
+	socket.on("tv:networkInfo", function(networkInfo) {
+		io.sockets.emit("tv:networkInfo", networkInfo);
+	});
+});
 
 
 
@@ -357,13 +372,14 @@ app.get('/config/buzzes.json', function(req, res) {
 
 
 // Fire up the web server.
+var networkURLs = [];
 http.listen(PORT_NUMBER, function(){
 
 	// This logs all the IPs available on the current device.
 	var os=require('os');
 	var ifaces=os.networkInterfaces();
 	var voterURL = "";
-	var networkURLs = [];
+	
 	networkURLs.push("http://localhost:"+PORT_NUMBER);
 	for (var dev in ifaces) {
 		var alias=0;
@@ -403,7 +419,10 @@ http.listen(PORT_NUMBER, function(){
 		console.log("    "+urlString+"/tv");
 	});
 	console.log("");
+});
 
+app.get('/networkURLs.json', function(req, res) {
+	res.json(networkURLs);
 });
 
 
