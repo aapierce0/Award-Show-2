@@ -357,6 +357,10 @@ io.on('connection', function(socket) {
 		io.sockets.emit("tv:networkInfo", networkInfo);
 	});
 
+	socket.on("tv:category", function(category) {
+		io.sockets.emit("tv:category", category);
+	});
+
 	socket.on("tv:leaderboardName", function(leaderboardName) {
 		io.sockets.emit("tv:leaderboardName", leaderboardName);
 	});

@@ -392,6 +392,10 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		socket.emit("tv:networkInfo", {SSID: ssid, password: password});
 	}
 
+	oscarsModel.setTVCategory = function(categoryName) {
+		socket.emit("tv:category", categoryName);
+	}
+
 	oscarsModel.setTVLeaderboard = function(leaderboardName) {
 		socket.emit("tv:leaderboardName", leaderboardName);
 	}
@@ -758,9 +762,18 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 
 
 
+	$scope.focusedCategoryName = null;
+	$scope.activeCategory = function() {
+		if ($scope.focusedCategoryName) {
+			return oscarsModel.categoryNamed($scope.focusedCategoryName);
+		} else {
+			return oscarsModel.calledOutCategory();
+		}
+	}
 
-
-	$scope.activeCategory = oscarsModel.calledOutCategory;
+	socket.on("tv:category", function(categoryName) {
+		$scope.focusedCategoryName = categoryName;
+	});
 
 
 

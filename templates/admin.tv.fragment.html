@@ -60,7 +60,15 @@
 
 		<!-- List of network URLs to show in TV QR code -->
 		<div class="col-md-4">
-			
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><span class="glyphicon glyphicon-flag"></span> Show Category</h3>
+				</div>
+				<ul class="list-group">
+					<a href="#" class="list-group-item" ng-click="oscarsModel.setTVCategory(null)"><span class="glyphicon glyphicon-bullhorn"></span> Called Out Category (default)</a>
+					<a href="#" class="list-group-item" ng-repeat="category in oscarsModel.categories" ng-click="oscarsModel.setTVCategory(category.name)">{{category.name}}</a>
+				</ul>
+			</div>
 		</div>
 
 
