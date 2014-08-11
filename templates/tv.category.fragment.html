@@ -1,14 +1,18 @@
-<h1>Category View!</h1>
+<div ng-if="activeCategory()" class="category">
+	<h1>{{activeCategory().name}}</h1>
 
-<div ng-repeat="category in oscarsModel.categories | filter : {votingActive:true}" class="category">
-	<span class="category-name">{{category.name}}</span>
-
-	<!-- Display a box for each individual nominee -->
-	<div ng-repeat="nominee in category.nominees" ng-class="{nominee: true, selected: (nominee.title == me.picks[category.name])}">
-		<span class="title">{{nominee.title}}</span>
-		<span class="subtitle">{{nominee.subtitle}}</span>
-		<div class="users">
-			<span ng-repeat="user in usersWhoPicked(category.name, nominee.title)" ng-class="{userToken: true, selected: (user.name == me.name)}">{{user.name}}</span>
-		</div>
-	</div>
+	<table class="nominees">
+		<thead>
+			<tr>
+				<th ng-repeat="nominee in activeCategory().nominees"><div class="nomineeWrapper nomineeHeader"><div>{{nominee.title}}</div><div></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td ng-repeat="nominee in activeCategory().nominees"><div class="nomineeWrapper nomineeBody"><div>
+					<span ng-repeat="user in oscarsModel.usersWhoPicked(activeCategory().name, nominee.title)" class="userToken">{{user.name}}</span>
+				</div></div></th>
+			</tr>
+		</tbody>
+	</table>
 </div>

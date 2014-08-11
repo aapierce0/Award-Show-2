@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="Oscars">
+<html ng-app="Oscars" id="TV">
 
 <head>
 	<title>Oscars 2 | TV</title>
@@ -24,11 +24,11 @@
 
 </head>
 
-<body ng-controller="TVCtrl" id="TV">
+<body ng-controller="TVCtrl">
 
 
 	<!-- This is the template for each category of votes. -->
-	<div class="main-content container" ng-include="contentURL"></div>
+	<div class="main-content container-fluid" ng-include="contentURL"></div>
 
 
 </body>

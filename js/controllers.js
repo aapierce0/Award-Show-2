@@ -341,8 +341,7 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 
 
-oscarsApp.controller("NomineePickerCtrl", 
-		function($scope, $http, $templateCache, socket, oscarsModel) {
+oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache, socket, oscarsModel) {
 
 	$scope.oscarsModel = oscarsModel;
 	window.controllerScope = $scope;
@@ -638,11 +637,16 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 		$scope.contentURL = "templates/tv."+viewName+".fragment.html";
 	}
 
-	$scope.setSelectedView("setup");
+	// $scope.setSelectedView("setup");
+	$scope.setSelectedView("category");
+
+
+
+
 
 
 	$scope.renderQRCode = function() {
-		if ($scope.qrcode) {
+		if ($scope.qrcode && $scope.setupURL) {
 			$scope.qrcode.makeCode($scope.setupURL);
 		}
 	}
@@ -669,6 +673,10 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 		$scope.networkSSID = networkInfo.SSID;
 		$scope.networkPassword = networkInfo.password;
 	});
+
+
+
+	$scope.activeCategory = oscarsModel.calledOutCategory;
 });
 
 
