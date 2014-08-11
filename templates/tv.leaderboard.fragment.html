@@ -1,1 +1,37 @@
-<h1>Leaderboard view!</h1>
+
+<div class="col-md-10 col-md-offset-1">
+	<h1>{{leaderboardTitle()}}</h1>
+	<table class="table leaderboard">
+		<thead>
+			<tr>
+				<th>Rank</th>
+				<th>Username</th>
+
+				<th ng-if="leaderboardName == 'wins' || leaderboardName == 'accuracy'">Wins</th><!-- Wins -->
+				<th ng-if="leaderboardName == 'accuracy'">Losses</th><!-- Losses -->
+				<th ng-if="leaderboardName == 'confidence'">Picked</th><!-- Picks -->
+				<th ng-if="leaderboardName == 'accuracy'">Accuracy</th><!-- Accuracy = W / (W + L) -->
+				<th ng-if="leaderboardName == 'confidence'">Confidence</th><!-- Confidence = P / T -->
+
+				<th ng-if="leaderboardName == 'winnings'">Winnings</th>
+				<th ng-if="leaderboardName == 'wealth'">Balance</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="user in leaderboardUsers()">
+				<td>{{$index + 1}}</td>
+				<td>{{user.name}}</td>
+
+				<td ng-if="leaderboardName == 'wins' || leaderboardName == 'accuracy'">{{oscarsModel.totalWinsForUser(user)}}</td>
+				<td ng-if="leaderboardName == 'accuracy'">{{oscarsModel.totalLossesForUser(user)}}</td>
+				<td ng-if="leaderboardName == 'confidence'">{{oscarsModel.totalPicksForUser(user)}}</td>
+				<td ng-if="leaderboardName == 'accuracy'">{{oscarsModel.accuracyForUser(user)}}</td>
+				<td ng-if="leaderboardName == 'confidence'">{{oscarsModel.confidenceForUser(user)}}</td>
+
+				<td ng-if="leaderboardName == 'winnings'"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.netIncomeForUser(user)}}</td>
+				<td ng-if="leaderboardName == 'wealth'"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(user)}}</td>
+
+			</tr>
+		</tbody>
+	</table>
+</div>

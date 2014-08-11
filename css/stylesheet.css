@@ -541,5 +541,10 @@ html#TV, html#TV body {
 	display: inline-block;
 }
 
+#TV table.leaderboard {
+	background-color: #FFF;
+	border: solid 1px #DDD;
+	font-size: 2em;
+}
 
 

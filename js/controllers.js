@@ -203,6 +203,84 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 
 
+	oscarsModel.totalWinsForUser = function(user) {
+
+		var correctCategories = _.filter(oscarsModel.categories, function(category) {
+			
+			// Find the winners for this category
+			// (there might be more than one, in the case of a tie)
+			var winners = _.where(category.nominees, {winner: true});
+
+			// If one of these winners was picked by the user, then it was a win.
+			return _.some(winners, function(nominee) {
+				return user.picks[category.name] == nominee.title;
+			});
+		});
+
+		return correctCategories.length;
+	}
+
+	oscarsModel.totalLossesForUser = function(user) {
+
+		// Count up the number of incorrect guesses in the user's picks.
+		var losses = _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
+
+			var category = oscarsModel.categoryNamed(categoryName);
+
+			// First determine if this category was called yet. If not, then skip this one.
+			if (!oscarsModel.categoryWasCalled(category))
+				return memo;
+
+			// If this nominee was not a winner, increment the number of losers.
+			if (!oscarsModel.nomineeNamed(category, nomineeTitle).winner)
+				memo++;
+
+			return memo;
+		}, 0);
+
+		return losses;
+	}
+
+	oscarsModel.totalPicksForUser = function(user) {
+		return _.size(user.picks);
+	}
+
+	oscarsModel.accuracyForUser = function(user) {
+
+		var calledCategories = _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
+		if (calledCategories.length == 0)
+			return "–";
+
+		var wins = oscarsModel.totalWinsForUser(user);
+		var calledCategoryNames = _.pluck(calledCategories, "name");
+		var pickedCategoryNames = _.keys(user.picks);
+
+		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
+		if (calledAndPickedCategories.length == 0)
+			return "–";
+
+		return (wins / calledAndPickedCategories.length).toFixed(3);
+	}
+
+	oscarsModel.confidenceForUser = function(user) {
+		var calledCategories = _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
+		if (calledCategories.length == 0)
+			return "–";
+
+		var calledCategoryNames = _.pluck(calledCategories, "name");
+		var pickedCategoryNames = _.keys(user.picks);
+
+		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
+
+		return (calledAndPickedCategories.length / calledCategories.length).toFixed(3);
+	}
+
+
+
+
+
+
+
 	function applyUpdatesToCollection(collection, updates, uniqueKey) {
 
 		// updates might be an array, or it might be a simgle object to update.
@@ -312,6 +390,10 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 
 	oscarsModel.setTVNetworkInfo = function(ssid, password) {
 		socket.emit("tv:networkInfo", {SSID: ssid, password: password});
+	}
+
+	oscarsModel.setTVLeaderboard = function(leaderboardName) {
+		socket.emit("tv:leaderboardName", leaderboardName);
 	}
 
 
@@ -638,7 +720,7 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 	}
 
 	// $scope.setSelectedView("setup");
-	$scope.setSelectedView("category");
+	$scope.setSelectedView("leaderboard");
 
 
 
@@ -676,7 +758,79 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 
 
 
+
+
 	$scope.activeCategory = oscarsModel.calledOutCategory;
+
+
+
+
+	
+	/*
+	This variable controls which leaderboard is shown.
+	Available options are:
+
+	* "wins" - raw number of categories the user guessed correctly.
+	* "accuracy" - percentage categories the player guessed correctly
+	* "confidence" - how many categories the user chose to play in
+	* "wealth" - player's current balance.
+	* "winnings" - how much money the player has won/lost (not to be confused with "wins" above)
+	*/
+
+	$scope.leaderboardName = "wealth";
+
+	socket.on("tv:leaderboardName", function(leaderboardName) {
+		$scope.leaderboardName = leaderboardName;
+	});
+
+
+	$scope.leaderboardUsers = function() {
+
+		var sortIterator;
+		var shouldReverse = false;
+
+		// The iterator should be chosen depending on which leaderboard we want to show.
+		// For now, just use "wealthiest players"
+		if ($scope.leaderboardName == "wins") {
+			sortIterator = oscarsModel.totalWinsForUser;
+			shouldReverse = true;
+		} else if ($scope.leaderboardName == "accuracy") {
+			sortIterator = oscarsModel.accuracyForUser;
+			shouldReverse = true;
+		} else if ($scope.leaderboardName == "confidence") {
+			sortIterator = oscarsModel.confidenceForUser;
+			shouldReverse = true;
+		} else if ($scope.leaderboardName == "winnings") {
+			sortIterator = oscarsModel.netIncomeForUser;
+			shouldReverse = true;
+		} else if ($scope.leaderboardName == "wealth") {
+			sortIterator = oscarsModel.balanceForUser;
+			shouldReverse = true;
+		}
+
+
+		// Get the sorted array.
+		var sortedArray = _.sortBy(oscarsModel.allUsers, oscarsModel.balanceForUser);
+
+		if (shouldReverse)
+			sortedArray.reverse();
+
+		return sortedArray;
+	}
+
+	$scope.leaderboardTitle = function() {
+		if ($scope.leaderboardName == "wins") {
+			return "Players With Most Correct Guesses";
+		} else if ($scope.leaderboardName == "accuracy") {
+			return "Most Accurate Players";
+		} else if ($scope.leaderboardName == "confidence") {
+			return "Most Confident Players";
+		} else if ($scope.leaderboardName == "winnings") {
+			return "Most Profitable Players";
+		} else if ($scope.leaderboardName == "wealth") {
+			return "Wealthiest Players";
+		}
+	}
 });
 
 
@@ -752,83 +906,6 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 	}
 
 
-
-
-
-
-
-
-	$scope.totalWinsForUser = function(user) {
-
-		var correctCategories = _.filter(oscarsModel.categories, function(category) {
-			
-			// Find the winners for this category
-			// (there might be more than one, in the case of a tie)
-			var winners = _.where(category.nominees, {winner: true});
-
-			// If one of these winners was picked by the user, then it was a win.
-			return _.some(winners, function(nominee) {
-				return user.picks[category.name] == nominee.title;
-			});
-		});
-
-		return correctCategories.length;
-	}
-
-	$scope.totalLossesForUser = function(user) {
-
-		// Count up the number of incorrect guesses in the user's picks.
-		var losses = _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
-
-			var category = oscarsModel.categoryNamed(categoryName);
-
-			// First determine if this category was called yet. If not, then skip this one.
-			if (!oscarsModel.categoryWasCalled(category))
-				return memo;
-
-			// If this nominee was not a winner, increment the number of losers.
-			if (!oscarsModel.nomineeNamed(category, nomineeTitle).winner)
-				memo++;
-
-			return memo;
-		}, 0);
-
-		return losses;
-	}
-
-	$scope.totalPicksForUser = function(user) {
-		return _.size(user.picks);
-	}
-
-	$scope.accuracyForUser = function(user) {
-
-		var calledCategories = _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
-		if (calledCategories.length == 0)
-			return "–";
-
-		var wins = $scope.totalWinsForUser(user);
-		var calledCategoryNames = _.pluck(calledCategories, "name");
-		var pickedCategoryNames = _.keys(user.picks);
-
-		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
-		if (calledAndPickedCategories.length == 0)
-			return "–";
-
-		return (wins / calledAndPickedCategories.length).toFixed(3);
-	}
-
-	$scope.confidenceForUser = function(user) {
-		var calledCategories = _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
-		if (calledCategories.length == 0)
-			return "–";
-
-		var calledCategoryNames = _.pluck(calledCategories, "name");
-		var pickedCategoryNames = _.keys(user.picks);
-
-		var calledAndPickedCategories = _.intersection(calledCategoryNames, pickedCategoryNames);
-
-		return (calledAndPickedCategories.length / calledCategories.length).toFixed(3);
-	}
 
 
 

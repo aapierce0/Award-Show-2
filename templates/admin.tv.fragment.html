@@ -20,9 +20,12 @@
 
 
 
+
+
 	<div class="row">
+
 		<!-- Network name and password -->
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<div class="panel panel-default">
 
 				<div class="panel-heading">
@@ -43,17 +46,32 @@
 					</form>
 				</div>
 			</div>
-		</div>
 
-
-		<!-- List of network URLs to show in TV QR code -->
-		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title"><span class="glyphicon glyphicon-qrcode"></span> QR Code</h3>
 				</div>
 				<ul class="list-group">
 					<a href="#" class="list-group-item" ng-repeat="networkURL in networkURLs" ng-click="oscarsModel.setTVQRString(networkURL)">{{networkURL}}</a>
+				</ul>
+			</div>
+		</div>
+
+
+		<!-- List of network URLs to show in TV QR code -->
+		<div class="col-md-4">
+			
+		</div>
+
+
+
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><span class="glyphicon glyphicon-th-list"></span> Leaderboard</h3>
+				</div>
+				<ul class="list-group">
+					<a href="#" class="list-group-item" ng-repeat="leaderboardName in ['wins', 'accuracy', 'confidence', 'winnings', 'wealth']" ng-click="oscarsModel.setTVLeaderboard(leaderboardName)">{{leaderboardName}}</a>
 				</ul>
 			</div>
 		</div>
