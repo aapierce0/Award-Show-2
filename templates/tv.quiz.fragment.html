@@ -1,0 +1,8 @@
+<!-- List of users that have buzzed in. -->
+<div class="quiz col-xs-offset-2 col-xs-8">
+	<h1></h1>
+	<ul class="list-group">
+		<li ng-if="oscarsModel.buzzedUsers.length == 0" class="list-group-item disabled waiting">waiting for buzzes...</li>
+		<li ng-repeat="user in oscarsModel.buzzedUsers" class="user list-group-item" ng-class="{'first-user':$index == 0}">{{user.name}}</li>
+	</ul>
+</div>

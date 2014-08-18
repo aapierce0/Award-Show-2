@@ -547,4 +547,20 @@ html#TV, html#TV body {
 	font-size: 2em;
 }
 
+#TV .quiz li {
+	font-size: 2em;
+	text-align: center;
+}
+
+#TV .quiz li:first-child {
+	font-size: 3em;
+}
+
+#TV .quiz li.waiting {
+	font-size: 1.8em;
+	font-style: italic;
+	color: #666;
+	opacity: 0.6;
+}
+
 
