@@ -147,7 +147,7 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 			memo.push(oscarsModel.usersWhoPicked(category.name, nomineeTitle));
 			return memo;
 		}, []);
-		return winningUsers;
+		return winningUsers[0]; // Not sure why this is an array within an array. Anyhow, the data we want is the first item in the list.
 	}
 
 	oscarsModel.categoryNamed = function(categoryName) {
