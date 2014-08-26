@@ -44,7 +44,7 @@
 					
 					<div style="float:right; display:inline-block">
 						<!-- <span class="username">{{me.name}}</span> -->
-						<span class="score"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(me)}}</span>
+						<span class="score"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(me) | number:0}}</span>
 						<button type="button" class="btn  btn-link" ng-click="logout()">Logout</button>
 					</div>
 				</div>

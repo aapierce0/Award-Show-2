@@ -50,7 +50,7 @@
 				</div>
 			</td>
 
-			<td><span class="glyphicon glyphicon-certificate"></span> {{user.buyIn}}</td><td>{{oscarsModel.netIncomeForUser(user)}}</td><td>{{oscarsModel.balanceForUser(user)}}</td>
+			<td><span class="glyphicon glyphicon-certificate"></span> {{user.buyIn | number:0}}</td><td>{{oscarsModel.netIncomeForUser(user) | number:0}}</td><td>{{oscarsModel.balanceForUser(user) | number:0}}</td>
 
 
 
