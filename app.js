@@ -312,7 +312,9 @@ io.on('connection', function(socket) {
 
 	// When a user buzzes in, mark them as buzzed.
 	socket.on("buzzer:buzz", function(userUUID) {
-		buzzedUUIDs.push(userUUID);
+		if (!_.contains(buzzedUUIDs, userUUID)) {
+			buzzedUUIDs.push(userUUID);
+		}
 		io.sockets.emit("buzzer:allBuzzes", buzzedUUIDs);
 	});
 
