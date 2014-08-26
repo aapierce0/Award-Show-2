@@ -1,16 +1,61 @@
-<div ng-repeat="category in oscarsModel.categories | filter : {name: focusedCategory.name}" class="category" ng-class="{locked: category.locked}">
-	<div class="category-name">{{category.name}}
-		<span class="glyphicon glyphicon-lock" ng-if="category.locked"></span>
-	</div>
-	<div class="value">Ante: <span class="glyphicon glyphicon-certificate"></span> {{category.value}}</div>
-	<div class="timeRemaining" ng-if="(oscarsModel.timeRemainingForCategory(category) > 0)">Time Remaining: {{oscarsModel.timeRemainingForCategory(category)}} {{oscarsModel.timeRemainingForCategory(category) == 1 ? "second" : "seconds"}}.</div>
 
-	<!-- Display a box for each individual nominee -->
-	<div ng-repeat="nominee in category.nominees" class="nominee" ng-class="{selected: (nominee.title == me.picks[category.name]), winner: nominee.winner, loser: oscarsModel.nomineeLost(category, nominee)}" ng-click="selectNominee(category.name, nominee.title)">
-		<span class="title">{{nominee.title}}</span>
-		<span class="subtitle">{{nominee.subtitle}}</span>
-		<div class="users" ng-if="oscarsModel.usersWhoPicked(category.name, nominee.title).length > 0">
-			<span ng-repeat="user in oscarsModel.usersWhoPicked(category.name, nominee.title)" ng-class="{userToken: true, selected: (user.name == me.name)}">{{user.name}}</span>
+
+
+<!-- Row for Vote Now -->
+<div class="categories">
+	<div class="table-section">
+		<h2>Vote Now!</h2>
+		<div class="row">
+			<div class="container col-xs-12">
+				<header>Best Actor in a Leading Role</header>
+				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
+				<div class="user-pick">Leonardo DiCaprio</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="table-section">
+		<h2>Categories</h2>
+		<div class="row">
+			<div class="container col-xs-12">
+				<header>Best Actress in a Supporting Role (TEST)</header>
+				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
+				<div class="user-pick no-selection">No Selection</div>
+			</div>
+		</div>
+		<div class="row" ng-repeat="category in oscarsModel.allUncalledCategories()">
+			<div class="container col-xs-12">
+				<header>{{category.name}}</header>
+				<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
+				<div class="user-pick">{{me.picks[category.name] || "No Selection"}}</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="table-section">
+		<h2>Called Categories</h2>
+		<div class="row" ng-repeat="category in oscarsModel.allCalledCategories()">
+			<div class="container col-xs-12">
+				<header>{{category.name}}</header>
+				<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
+				<div class="user-pick" ng-class="(oscarsModel.nomineeNamed(category, me.picks[category.name]).winner ? 'correct' : 'incorrect')">{{me.picks[category.name] || "No Selection"}}</div>
+				<div ng-if="!oscarsModel.nomineeNamed(category, me.picks[category.name]).winner" class="correct">{{oscarsModel.winningNomineeForCategory(category).title}}</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="container col-xs-12">
+				<header>Best Actor in a Supporting Role</header>
+				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
+				<div class="user-pick correct">Michael Cera</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="container col-xs-12">
+				<header>Best Actress in a Leading Role</header>
+				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
+				<div class="user-pick incorrect">Robin Wright</div>
+				<div class="user-pick correct">Natalie Portman</div>
+			</div>
 		</div>
 	</div>
 </div>

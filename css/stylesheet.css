@@ -151,6 +151,37 @@ span.marquee {
 	margin-bottom: 2em;
 }
 
+#User .categories .table-section > h2 {
+	font-size: 1.4em;
+	margin-bottom: 6px;
+}
+
+#User .categories .table-section .row {
+	background-color: #FFF;
+	border-top: solid 1px #DDD;
+}
+
+#User .categories .table-section .row:last-child {
+	border-bottom: solid 1px #DDD;
+}
+
+#User .categories .table-section .row > .container {
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+#User .categories .table-section .row > .container > header {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#User .categories .table-section .row > .container .value {
+	font-size: 0.9em;
+}
+
+
+
+
 #User .category.locked {
 	opacity: 0.5;
 }

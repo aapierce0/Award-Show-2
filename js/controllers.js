@@ -168,6 +168,18 @@ oscarsApp.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 		return _.findWhere(oscarsModel.categories, {calledOut: true});
 	}
 
+	oscarsModel.allCalledCategories = function() {
+		return _.filter(oscarsModel.categories, oscarsModel.categoryWasCalled);
+	}
+
+	oscarsModel.allUncalledCategories = function() {
+		return _.reject(oscarsModel.categories, oscarsModel.categoryWasCalled);
+	}
+
+	oscarsModel.winningNomineeForCategory = function(category) {
+		return _.findWhere(category.nominees, {winner: true});
+	}
+
 	oscarsModel.nomineeLost = function(category, nominee) {
 		// If any nominee in this category won other than the selected one, then they are a loser.
 		return !nominee.winner && _.some(category.nominees, function(someNominee) {
