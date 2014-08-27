@@ -1,0 +1,144 @@
+
+#Admin {
+	margin-top: 1em;
+}
+
+#Admin > ul.nav > li:first-child {
+	margin-left: 2em;
+}
+
+#Admin div.main-content {
+	background-color: #FFF;
+	border-bottom: solid 1px #DDD;
+}
+
+#Admin div.login {
+	padding-bottom: 2em;
+}
+
+
+
+#Admin table.table {
+	background-color: #FFF;
+	margin-bottom: 0;
+}
+
+#Admin table.table.users {
+	white-space: nowrap;
+}
+
+#Admin table.table td {
+	vertical-align: middle;
+}
+
+#Admin table.table .border-left {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #DDD;
+	padding-left: 12px;
+}
+
+#Admin table.table .border-right {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #DDD;
+	padding-right: 12px;
+}
+
+#Admin table.table .align-center {
+	text-align: center;
+}
+
+#Admin td.uuid {
+	font-family: Inconsolata, consolas, Menlo, Courier, monospace;
+	
+}
+/* Hide the UUID column unless we're in iPad landscape mode */
+@media (max-width: 1023px) {
+	#Admin .uuid {
+		display: none;
+	}
+}
+
+
+
+
+
+#Admin table.categories tr.category.pickWinner span.nominee {
+	background-color: #428BCA;
+	color: #FFF;
+}
+
+#Admin table.categories span.nominee {
+	padding: 0.4em;
+	margin: 0.2em;
+	background-color: #EEE;
+	border-radius: 4px;
+	display: inline-block;
+	font-weight: bold;
+}
+
+#Admin table.categories span.nominee.winner {
+	background-color: green;
+	color: #FFF;
+	font-weight: bold;
+}
+
+#Admin table.categories td.category-controls {
+	white-space: nowrap;
+}
+
+
+
+
+
+
+#Admin div.triviaQuestions {
+	background-color: #FFF;
+	padding: 3em;
+
+	font-size: 1.2em;
+}
+
+#Admin div.triviaQuestions div.buzzedUsers {
+	float:right;
+	min-width: 20%;
+}
+
+#Admin div.triviaQuestions div.buzzedUsers {
+	float:right;
+	min-width: 20%;
+}
+
+#Admin div.triviaQuestions li.first-user {
+	font-size: 1.2em;
+}
+
+#Admin div.triviaQuestions li.disabled {
+	color: #888;
+	background-color: #EEE;
+}
+
+#Admin div.triviaQuestions div.question {
+	display: inline-block;
+}
+
+#Admin div.triviaQuestions button.correct {
+	color: white;
+	background-color: #76D66B;
+}
+
+#Admin div.triviaQuestions button.incorrect {
+	color: white;
+	background-color: #FC4F4C;
+}
+
+
+
+
+
+
+
+#Admin div.tv div.row {
+	margin-bottom: 1em;
+}

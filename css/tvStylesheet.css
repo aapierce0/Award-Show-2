@@ -1,0 +1,114 @@
+
+
+
+
+
+
+#TV {
+	font-size: 1em;
+}
+
+html#TV, html#TV body {
+	height: 100%;
+	min-height: 100%;
+}
+
+#TV .qrcode-body {
+	text-align: center;
+}
+
+#TV #qrcode {
+	display: inline-block;
+}
+
+#TV .userScore {
+	display: inline-block;
+	float: right;
+}
+
+#TV .exchangeMethod {
+	font-size: 2.2em;
+	text-align: center;
+	margin: 0;
+}
+
+#TV .exchangeMethod .glyphicon-usd {
+	color: green;
+}
+
+#TV .exchangeMethod .glyphicon {
+	font-size: 0.8em;
+}
+
+#TV table.nominees {
+	width: 100%;
+	min-height: 400px;
+	border-collapse: collapse;
+}
+
+#TV table.nominees th, #TV table.nominees td {
+	height: 1px;
+	width: 16%;
+}
+
+#TV table.nominees .nomineeWrapper {
+	margin: 0 4px;
+	background-color: #FFF;
+	border: solid 1px #BBB;
+	height: 100%;
+
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+#TV table.nominees .nomineeWrapper > div {
+	margin: 4px 8px;
+	text-align: center;
+}
+
+#TV table.nominees .nomineeBody {
+	position: relative;
+	top: -1px;
+	border-top: none;
+	background-color: #F4F9FF;
+	text-align: center;
+}
+
+#TV table.nominees .nomineeBody > div {
+	padding-top: 10px;
+	margin-top: 0;
+}
+
+#TV .userToken {
+	border: solid 2px;
+	border-color: #666;
+	border-radius: 1em;
+	background-color: #FFF;
+	padding: 0 0.6em;
+	margin: 0 2px 0.2em;
+
+	display: inline-block;
+}
+
+#TV table.leaderboard {
+	background-color: #FFF;
+	border: solid 1px #DDD;
+	font-size: 2em;
+}
+
+#TV .quiz li {
+	font-size: 2em;
+	text-align: center;
+}
+
+#TV .quiz li:first-child {
+	font-size: 3em;
+}
+
+#TV .quiz li.waiting {
+	font-size: 1.8em;
+	font-style: italic;
+	color: #666;
+	opacity: 0.6;
+}
+
+
