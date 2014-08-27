@@ -25,10 +25,10 @@ app.get('/*', function(req, res, next){
 	next(); 
 });
 
+app.use('/lib', express.static(__dirname + '/lib'));
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/img', express.static(__dirname + '/img'));
-app.use('/fonts', express.static(__dirname + '/fonts'));
 app.use('/templates', express.static(__dirname + '/templates'));
 
 
