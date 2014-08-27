@@ -224,6 +224,25 @@ oscarsServices.factory('oscarsModel', function($rootScope, $http, socket, $timeo
 		}, 0);
 	}
 
+	oscarsModel.netIncomeCalledForUser = function(user) {
+		return _.reduce(user.picks, function(memo, nomineeTitle, categoryName) {
+			var category = oscarsModel.categoryNamed(categoryName);
+
+			// Only count categories that have been called. Uncalled categories are not counted.
+			if (oscarsModel.categoryWasCalled(category)) {
+
+				var nominee = oscarsModel.nomineeNamed(category, nomineeTitle);
+
+				if (nominee.winner) {
+					return memo + oscarsModel.payoutForCategory(category) - category.value;
+				} else {
+					return memo - category.value;
+				}
+			}
+			return memo;
+		}, 0);
+	}
+
 
 	// This method tells us how much the user is owed from the bank
 	oscarsModel.balanceForUser = function(user) {

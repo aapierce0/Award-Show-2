@@ -408,7 +408,7 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 			sortIterator = oscarsModel.confidenceForUser;
 			shouldReverse = true;
 		} else if ($scope.leaderboardName == "winnings") {
-			sortIterator = oscarsModel.netIncomeForUser;
+			sortIterator = oscarsModel.netIncomeCalledForUser;
 			shouldReverse = true;
 		} else if ($scope.leaderboardName == "wealth") {
 			sortIterator = oscarsModel.balanceForUser;
@@ -417,7 +417,7 @@ oscarsApp.controller("TVCtrl", function($scope, socket, oscarsModel) {
 
 
 		// Get the sorted array.
-		var sortedArray = _.sortBy(oscarsModel.allUsers, oscarsModel.balanceForUser);
+		var sortedArray = _.sortBy(oscarsModel.allUsers, sortIterator);
 
 		if (shouldReverse)
 			sortedArray.reverse();
