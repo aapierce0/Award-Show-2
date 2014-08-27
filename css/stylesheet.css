@@ -159,6 +159,7 @@ span.marquee {
 #User .categories .table-section .row {
 	background-color: #FFF;
 	border-top: solid 1px #DDD;
+	position: relative;
 }
 
 #User .categories .table-section .row:last-child {
@@ -168,6 +169,7 @@ span.marquee {
 #User .categories .table-section .row > .container {
 	padding-top: 4px;
 	padding-bottom: 4px;
+	padding-right: 35px;
 }
 
 #User .categories .table-section .row > .container > header {
@@ -179,20 +181,55 @@ span.marquee {
 	font-size: 0.9em;
 }
 
+#User .categories .table-section .row > .container .glyphicon-ok,
+#User .categories .table-section .row > .container .glyphicon-remove {
+	display: none;
+}
+
+#User .categories .table-section .row > .container > .correct {
+	color: green;
+}
+
+#User .categories .table-section .row > .container > .correct > .glyphicon-ok {
+	display: inline;
+}
+
+#User .categories .table-section .row > .container > .incorrect {
+	color: red;
+}
+
+#User .categories .table-section .row > .container > .incorrect > .glyphicon-remove {
+	display: inline;
+}
+
+#User .categories .table-section .row > .glyphicon-chevron-right {
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -0.5em;
+
+	font-size: 1.5em;
+	opacity: 0.6;
+}
 
 
 
-#User .category.locked {
+#User .focused-category {
+	padding-bottom: 60px;
+}
+
+#User .focused-category.locked {
 	opacity: 0.5;
 }
 
 @media (min-width: 768px) {
-	#User .category {
+	#User .focused-category {
 		font-size: 1.4em;
 	}
 }
 
-#User .category .category-name {
+#User .focused-category .category-name {
 	display: block;
 	text-align: left;
 
@@ -200,12 +237,12 @@ span.marquee {
 	font-size: 1.2em;
 }
 
-#User .category .value {
+#User .focused-category .value {
 	text-align: left;
 	font-size: 1.1em;
 }
 
-#User .category .nominee {
+#User .focused-category .nominee {
 
 	font-size: 0.9em;
 
@@ -223,7 +260,7 @@ span.marquee {
 
 @media (min-width: 768px) {
 
-	#User .category .nominee {
+	#User .focused-category .nominee {
 		font-size: 1.0em;
 		padding: 0.7em 0;
 		margin: 1em 2%;
@@ -231,22 +268,22 @@ span.marquee {
 	}
 }
 
-#User .category .nominee.selected {
+#User .focused-category .nominee.selected {
 	border-color: #428BCA;
 	color: #428BCA;
 }
 
-#User .category .nominee.winner {
+#User .focused-category .nominee.winner {
 	border-color: green;
 	color: green;
 }
 
-#User .category .nominee.selected.loser {
+#User .focused-category .nominee.selected.loser {
 	border-color: red;
 	color: red;
 }
 
-#User .category .nominee > span {
+#User .focused-category .nominee > span {
 	display: inline;
 	text-align: center;
 
@@ -254,27 +291,29 @@ span.marquee {
 }
 
 @media (min-width: 768px) {
-	#User .category .nominee > span {
+	#User .focused-category .nominee > span {
 		display: block;
 		text-align: center;
 	}
 }
 
-#User .category .nominee span.title {
+#User .focused-category .nominee span.title {
 	font-weight: bold;
 	text-transform: uppercase;
 }
 
-#User .category .nominee span.subtitle {
+#User .focused-category .nominee span.subtitle {
 	font-style: italic;
 }
 
-#User .category .nominee .users {
+#User .focused-category .nominee .users {
 	font-size: 0.8em;
 	margin-top: 8px;
+
+	min-height: 1em;
 }
 
-#User .category .nominee .users .userToken {
+#User .focused-category .nominee .users .userToken {
 	border: solid 1px;
 	border-color: inherit;
 	border-radius: 1em;
@@ -284,17 +323,17 @@ span.marquee {
 	display: inline-block;
 }
 
-#User .category .nominee.selected .users .userToken.selected {
+#User .focused-category .nominee.selected .users .userToken.selected {
 	color: white;
 	font-weight: bold;
 	background-color: #428BCA;
 }
 
-#User .category .nominee.selected.winner .users .userToken.selected {
+#User .focused-category .nominee.selected.winner .users .userToken.selected {
 	background-color: green;
 }
 
-#User .category .nominee.selected.loser .users .userToken.selected {
+#User .focused-category .nominee.selected.loser .users .userToken.selected {
 	background-color: red;
 }
 

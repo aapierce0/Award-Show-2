@@ -2,60 +2,73 @@
 
 
 <!-- Row for Vote Now -->
-<div class="categories">
-	<div class="table-section">
-		<h2>Vote Now!</h2>
-		<div class="row">
-			<div class="container col-xs-12">
-				<header>Best Actor in a Leading Role</header>
-				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
-				<div class="user-pick">Leonardo DiCaprio</div>
+<div id="userVote" class="row">
+	<div class="categories col-xs-12" ng-hide="focusedCategory">
+		<div class="table-section">
+			<h2>Vote Now!</h2>
+			<div class="row">
+				<div class="container col-xs-12">
+					<header>Best Actor in a Leading Role</header>
+					<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
+					<div class="user-pick">Leonardo DiCaprio</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-section">
+			<h2>Categories</h2>
+			<div class="row">
+				<div class="container col-xs-12">
+					<header>Best Actress in a Supporting Role (TEST)</header>
+					<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
+					<div class="user-pick no-selection">No Selection</div>
+				</div>
+			</div>
+			<div class="row" ng-repeat="category in oscarsModel.allUncalledCategories()" ng-click="setFocusedCategory(category)">
+				<div class="container col-xs-12">
+					<header>{{category.name}}</header>
+					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
+					<div class="user-pick">{{me.picks[category.name] || "No Selection"}}</div>
+				</div>
+				<span class="glyphicon glyphicon-chevron-right"></span>
+			</div>
+		</div>
+
+		<div class="table-section">
+			<h2>Called Categories</h2>
+			<div class="row" ng-repeat="category in oscarsModel.allCalledCategories()" ng-click="setFocusedCategory(category)">
+				<div class="container col-xs-12">
+					<header>{{category.name}}</header>
+					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
+					<div class="user-pick" ng-class="(userWonCategory(category) ? 'correct' : 'incorrect')">
+						<span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span> {{me.picks[category.name] || "No Selection"}} <span ng-show="userWonCategory(category)"><span class="glyphicon glyphicon-certificate"></span>+{{oscarsModel.payoutForCategory(category) - category.value | number:0}}</span><span ng-show="!userWonCategory(category)"><span class="glyphicon glyphicon-certificate"></span>-{{category.value | number:0}}</div>
+					<div ng-if="!userWonCategory(category)" class="correct"><span class="glyphicon glyphicon-ok"></span> {{oscarsModel.winningNomineeForCategory(category).title}}</div>
+				</div>
+				<span class="glyphicon glyphicon-chevron-right"></span>
 			</div>
 		</div>
 	</div>
 
-	<div class="table-section">
-		<h2>Categories</h2>
-		<div class="row">
-			<div class="container col-xs-12">
-				<header>Best Actress in a Supporting Role (TEST)</header>
-				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
-				<div class="user-pick no-selection">No Selection</div>
-			</div>
-		</div>
-		<div class="row" ng-repeat="category in oscarsModel.allUncalledCategories()">
-			<div class="container col-xs-12">
-				<header>{{category.name}}</header>
-				<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
-				<div class="user-pick">{{me.picks[category.name] || "No Selection"}}</div>
-			</div>
-		</div>
-	</div>
+	<div class="focused-category container" ng-if="focusedCategory">
 
-	<div class="table-section">
-		<h2>Called Categories</h2>
-		<div class="row" ng-repeat="category in oscarsModel.allCalledCategories()">
-			<div class="container col-xs-12">
-				<header>{{category.name}}</header>
-				<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
-				<div class="user-pick" ng-class="(oscarsModel.nomineeNamed(category, me.picks[category.name]).winner ? 'correct' : 'incorrect')">{{me.picks[category.name] || "No Selection"}}</div>
-				<div ng-if="!oscarsModel.nomineeNamed(category, me.picks[category.name]).winner" class="correct">{{oscarsModel.winningNomineeForCategory(category).title}}</div>
-			</div>
+		<div class="category-name">{{focusedCategory.name}}
+			<span class="glyphicon glyphicon-lock" ng-if="focusedCategory.locked"></span>
 		</div>
-		<div class="row">
-			<div class="container col-xs-12">
-				<header>Best Actor in a Supporting Role</header>
-				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
-				<div class="user-pick correct">Michael Cera</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="container col-xs-12">
-				<header>Best Actress in a Leading Role</header>
-				<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
-				<div class="user-pick incorrect">Robin Wright</div>
-				<div class="user-pick correct">Natalie Portman</div>
+		<div class="value">Ante: <span class="glyphicon glyphicon-certificate"></span> {{focusedCategory.value}}</div>
+		<div class="timeRemaining" ng-if="(oscarsModel.timeRemainingForCategory(focusedCategory) > 0)">Time Remaining: {{oscarsModel.timeRemainingForCategory(focusedCategory)}} {{oscarsModel.timeRemainingForCategory(focusedCategory) == 1 ? "second" : "seconds"}}.</div>
+
+
+		<div ng-repeat="nominee in focusedCategory.nominees" class="nominee" ng-class="{selected: (nominee.title == me.picks[focusedCategory.name]), winner: nominee.winner, loser: oscarsModel.nomineeLost(focusedCategory, nominee)}" ng-click="selectNominee(focusedCategory.name, nominee.title)">
+			<span class="title">{{nominee.title}}</span>
+			<span class="subtitle">{{nominee.subtitle}}</span>
+			<div class="users">
+				<span ng-repeat="user in oscarsModel.usersWhoPicked(focusedCategory.name, nominee.title)" ng-class="{userToken: true, selected: (user.name == me.name)}">{{user.name}}</span>
 			</div>
 		</div>
 	</div>
 </div>
+
+
+
+
+
