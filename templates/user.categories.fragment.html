@@ -4,39 +4,46 @@
 <!-- Row for Vote Now -->
 <div id="userVote" class="row">
 	<div class="categories col-xs-12" ng-hide="focusedCategory">
+
+
+		<!-- Display the called-out category, if any -->
 		<div class="table-section">
 			<h2>Vote Now!</h2>
-			<div class="row">
-				<div class="container col-xs-12">
-					<header>Best Actor in a Leading Role</header>
-					<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
-					<div class="user-pick">Leonardo DiCaprio</div>
-				</div>
+			<div class="row no-called-out-category container" ng-hide="oscarsModel.calledOutCategory()">
+				none right now...
 			</div>
-		</div>
-
-		<div class="table-section">
-			<h2>Categories</h2>
-			<div class="row">
+			<div class="row category-row" ng-if="oscarsModel.calledOutCategory()" ng-click="setFocusedCategory(oscarsModel.calledOutCategory())">
 				<div class="container col-xs-12">
-					<header>Best Actress in a Supporting Role (TEST)</header>
-					<div class="value"><span class="glyphicon glyphicon-certificate"></span> 100 Bet</div>
-					<div class="user-pick no-selection">No Selection</div>
-				</div>
-			</div>
-			<div class="row" ng-repeat="category in oscarsModel.allUncalledCategories()" ng-click="setFocusedCategory(category)">
-				<div class="container col-xs-12">
-					<header>{{category.name}}</header>
-					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
-					<div class="user-pick">{{me.picks[category.name] || "No Selection"}}</div>
+					<header>{{oscarsModel.calledOutCategory().name}}</header>
+					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.calledOutCategory().value}} Bet</div>
+					<div class="user-pick" ng-class="(userWonCategory(oscarsModel.calledOutCategory()) ? 'correct' : 'incorrect')">
+						<span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span> {{me.picks[oscarsModel.calledOutCategory().name] || "No Selection"}} <span ng-show="userWonCategory(oscarsModel.calledOutCategory())"><span class="glyphicon glyphicon-certificate"></span>+{{oscarsModel.payoutForCategory(oscarsModel.calledOutCategory()) - oscarsModel.calledOutCategory().value | number:0}}</span><span ng-show="!userWonCategory(oscarsModel.calledOutCategory())"><span class="glyphicon glyphicon-certificate"></span>-{{oscarsModel.calledOutCategory().value | number:0}}</div>
+					<div ng-if="!userWonCategory(oscarsModel.calledOutCategory())" class="correct"><span class="glyphicon glyphicon-ok"></span> {{oscarsModel.winningNomineeForCategory(oscarsModel.calledOutCategory()).title}}</div>
 				</div>
 				<span class="glyphicon glyphicon-chevron-right"></span>
 			</div>
 		</div>
 
+
+		<!-- Categories yet to be called -->
+		<div class="table-section">
+			<h2>Categories</h2>
+
+			<div class="row category-row" ng-repeat="category in oscarsModel.allUncalledCategories()" ng-click="setFocusedCategory(category)">
+				<div class="container col-xs-12">
+					<header>{{category.name}}</header>
+					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
+					<div class="user-pick" ng-class="{'no-selection': !me.picks[category.name]}">{{me.picks[category.name] || "No Selection"}}</div>
+				</div>
+				<span class="glyphicon glyphicon-chevron-right"></span>
+			</div>
+		</div>
+
+
+		<!-- Categories that were already called -->
 		<div class="table-section">
 			<h2>Called Categories</h2>
-			<div class="row" ng-repeat="category in oscarsModel.allCalledCategories()" ng-click="setFocusedCategory(category)">
+			<div class="row category-row" ng-repeat="category in oscarsModel.allCalledCategories()" ng-click="setFocusedCategory(category)">
 				<div class="container col-xs-12">
 					<header>{{category.name}}</header>
 					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
@@ -47,9 +54,14 @@
 				<span class="glyphicon glyphicon-chevron-right"></span>
 			</div>
 		</div>
+
+
+		
 	</div>
 
-	<div class="focused-category container" ng-if="focusedCategory">
+
+
+	<div class="focused-category container" ng-if="focusedCategory" ng-class="{locked: focusedCategory.locked}">
 
 		<div class="category-name">{{focusedCategory.name}}
 			<span class="glyphicon glyphicon-lock" ng-if="focusedCategory.locked"></span>

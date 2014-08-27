@@ -151,58 +151,72 @@ span.marquee {
 	margin-bottom: 2em;
 }
 
-#User .categories .table-section > h2 {
+#User .table-section > h2 {
 	font-size: 1.4em;
 	margin-bottom: 6px;
 }
 
-#User .categories .table-section .row {
+#User .table-section .no-called-out-category {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 1.8em;
+	color: #CCC;
+	font-style: italic;
+	opacity: 0.7;
+}
+
+#User .table-section .row {
 	background-color: #FFF;
 	border-top: solid 1px #DDD;
 	position: relative;
 }
 
-#User .categories .table-section .row:last-child {
+#User .table-section .row:last-child {
 	border-bottom: solid 1px #DDD;
 }
 
-#User .categories .table-section .row > .container {
+#User .table-section .category-row > .container {
 	padding-top: 4px;
 	padding-bottom: 4px;
 	padding-right: 35px;
 }
 
-#User .categories .table-section .row > .container > header {
+#User .table-section .category-row > .container > .user-pick.no-selection {
+	color: #CCC;
+	font-style: italic;
+}
+
+#User .table-section .category-row > .container > header {
 	font-size: 1.2em;
 	font-weight: bold;
 }
 
-#User .categories .table-section .row > .container .value {
+#User .table-section .category-row > .container .value {
 	font-size: 0.9em;
 }
 
-#User .categories .table-section .row > .container .glyphicon-ok,
-#User .categories .table-section .row > .container .glyphicon-remove {
+#User .table-section .category-row > .container .glyphicon-ok,
+#User .table-section .category-row > .container .glyphicon-remove {
 	display: none;
 }
 
-#User .categories .table-section .row > .container > .correct {
+#User .table-section .category-row > .container > .correct {
 	color: green;
 }
 
-#User .categories .table-section .row > .container > .correct > .glyphicon-ok {
+#User .table-section .category-row > .container > .correct > .glyphicon-ok {
 	display: inline;
 }
 
-#User .categories .table-section .row > .container > .incorrect {
+#User .table-section .category-row > .container > .incorrect {
 	color: red;
 }
 
-#User .categories .table-section .row > .container > .incorrect > .glyphicon-remove {
+#User .table-section .category-row > .container > .incorrect > .glyphicon-remove {
 	display: inline;
 }
 
-#User .categories .table-section .row > .glyphicon-chevron-right {
+#User .table-section .category-row > .glyphicon-chevron-right {
 	display: block;
 	position: absolute;
 	right: 10px;
@@ -310,7 +324,7 @@ span.marquee {
 	font-size: 0.8em;
 	margin-top: 8px;
 
-	min-height: 1em;
+	min-height: 1.8em;
 }
 
 #User .focused-category .nominee .users .userToken {
