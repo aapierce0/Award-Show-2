@@ -597,6 +597,9 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 		$scope.acceptWinner[category.name] = false;
 
 		oscarsModel.updateCategories(category);
+
+		// Now that the winner has been called, reset the callout.
+		$scope.resetCallout();
 	}
 
 

@@ -52,6 +52,16 @@ oscarsServices.factory('socket', function ($rootScope) {
 					}
 				});
 			});
+		},
+		reconnect: function(callback) {
+			socket = io.connect();
+			socket.once("connect", function() {
+				$rootScope.$apply(function() {
+					if (callback) {
+						callback.apply(socket, args);
+					}
+				})
+			})
 		}
 	};
 });
@@ -66,6 +76,13 @@ oscarsServices.factory('socket', function ($rootScope) {
 // Oscars API
 oscarsServices.factory('oscarsModel', function($rootScope, $http, socket, $timeout) {
 	var oscarsModel = {};
+
+	socket.on('disconnect', function() {
+		console.log('disconnected');
+		socket.reconnect(function() {
+			console.log("Reconnection successful!");
+		});
+	});
 
 	// Load the categories and nominees.
 	oscarsModel.getCategories = $http.get("/config/categories.json").success(function(data) {
