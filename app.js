@@ -96,6 +96,20 @@ function applyUpdatesToCollection(collection, updates, uniqueKey) {
 
 
 
+// Make sure the config directory exists (it probably won't be cloned from Git)
+// This only needs to be run once on startup.
+try {
+	fs.mkdirSync(__dirname + "/config/");
+} catch(e) {
+
+	// node will throw an EEXIST exception if the folder already exists.
+	// We don't care if the folder already exists, but other errors might be important.
+	if ( e.code != 'EEXIST' ) throw e;
+}
+
+
+
+
 
 
 function readConfigSync(configIdentifier) {
@@ -137,15 +151,105 @@ function writeConfig(jsonData, configIdentifier) {
 
 
 
-
 // Load the list of categories and nominees.
 var categories = readConfigSync("categories");
 
 // Undefined categories is a fatal error condition. Exit immediately.
 if (!categories) {
-	console.log("\n\nERROR: file "+configFile+" does not exist. "+
-		"You must create this file in order for the application to run properly.\n\n");
-	return;
+	console.log("\n\nWARNING: ./config/categories.json does not exist.\n"+
+		"This file is necessary in order for the application to work.\n"+
+		"For demonstration purposes, I will create a categories.json\n"+
+		"file for you, with three of the categories from the 2013\n"+
+		"Oscars awards.\n");
+
+	categories = [
+		{
+			"name":"Best Picture",
+			"value":100,
+			"nominees": [
+				{
+					"title":"American Hustle"
+				},
+				{
+					"title":"Captain Phillips"
+				},
+				{
+					"title":"Dallas Buyers Club"
+				},
+				{
+					"title":"Gravity"
+				},
+				{
+					"title":"Her"
+				},
+				{
+					"title":"Nebraska"
+				},
+				{
+					"title":"Philomena"
+				},
+				{
+					"title":"12 Years a Slave"
+				},
+				{
+					"title":"The Wolf of Wall Street"
+				}
+
+			]
+		},
+		{
+			"name":"Best Actor in a Leading Role",
+			"value":100,
+			"nominees": [
+				{
+					"title":"Christian Bale",
+					"subtitle":"American Hustle"
+				},
+				{
+					"title":"Bruce Dern", 
+					"subtitle":"Nebraska"
+				},
+				{
+					"title":"Leonardo DiCaprio",
+					"subtitle":"The Wolf of Wall Street"
+				},
+				{
+					"title":"Chiwetel Ejiofor",
+					"subtitle":"12 Years a Slave"
+				},
+				{
+					"title":"Matthew McConaughey",
+					"subtitle":"Dallas Buyers Club"
+				}
+			]
+		},
+		{
+			"name":"Best Actress in a Leading Role",
+			"value":100,
+			"nominees": [
+				{
+					"title":"Amy Adams",
+					"subtitle":"American Hustle"
+				},
+				{
+					"title":"Cate Blanchett", 
+					"subtitle":"Blue Jasmine"
+				},
+				{
+					"title":"Sandra Bullock",
+					"subtitle":"Gravity"
+				},
+				{
+					"title":"Judi Dench",
+					"subtitle":"Philomena"
+				},
+				{
+					"title":"Meryl Streep",
+					"subtitle":"August: Osage County"
+				}
+			]
+		}
+	];
 }
 
 // Loop through the list of categories and make sure the values are set appropriately.
@@ -428,6 +532,9 @@ http.listen(PORT_NUMBER, function(){
 	networkURLs.forEach(function(urlString) {
 		console.log("    "+urlString+"/tv");
 	});
+	console.log("");
+
+	console.log("To start, I recommend pointing your browser to the admin page. The admin password is \"kevinspacey\"");
 	console.log("");
 });
 
