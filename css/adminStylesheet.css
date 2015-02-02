@@ -88,6 +88,10 @@
 	white-space: nowrap;
 }
 
+#Admin table.categories tbody:nth-child(3) tr:first-child {
+	border-top: double 7px #428bca; 
+}
+
 
 
 

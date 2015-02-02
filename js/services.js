@@ -27,47 +27,14 @@
 
 
 
-var oscarsServices = angular.module("OscarsService", []);
+var oscarsServices = angular.module("OscarsService", ['btford.socket-io']);
 
 
 
-// Socket IO for Angular JS
-oscarsServices.factory('socket', function ($rootScope) {
-	var socket = io.connect();
-	return {
-		on: function (eventName, callback) {
-			socket.on(eventName, function () {  
-				var args = arguments;
-				$rootScope.$apply(function () {
-					callback.apply(socket, args);
-				});
-			});
-		},
-		emit: function (eventName, data, callback) {
-			socket.emit(eventName, data, function () {
-				var args = arguments;
-				$rootScope.$apply(function () {
-					if (callback) {
-						callback.apply(socket, args);
-					}
-				});
-			});
-		},
-		reconnect: function(callback) {
-			socket = io.connect();
-			socket.once("connect", function() {
-				$rootScope.$apply(function() {
-					if (callback) {
-						callback.apply(socket, args);
-					}
-				})
-			})
-		}
-	};
+
+oscarsServices.factory('socket', function(socketFactory) {
+	return socketFactory();
 });
-
-
-
 
 
 
@@ -174,6 +141,12 @@ oscarsServices.factory('oscarsModel', function($rootScope, $http, socket, $timeo
 			return nominee.winner;
 		});
 	};
+
+	// This is just the opposite of categoryWasCalled.
+	// This function needs to exist because ng-repeat filter doesn't allow you to negate a filter predicate inline.
+	oscarsModel.categoryWasNotCalled = function(category) {
+		return !oscarsModel.categoryWasCalled(category);
+	}
 
 	oscarsModel.calledOutCategory = function() {
 		return _.findWhere(oscarsModel.categories, {calledOut: true});
@@ -371,7 +344,7 @@ oscarsServices.factory('oscarsModel', function($rootScope, $http, socket, $timeo
 
 				// The item already exists. Find this item, and replace it.
 				var existingIndex = _.indexOf(existingItems, item[uniqueKey]);
-				collection[existingIndex] = item;
+				_(collection[existingIndex]).extend(item);
 
 			} else {
 

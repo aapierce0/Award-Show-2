@@ -143,8 +143,10 @@ oscarsApp.controller("NomineePickerCtrl", function($scope, $http, $templateCache
 	});
 
 	$scope.userWonCategory = function(category) {
-		var nomineeTitle = $scope.me.picks[category.name];
-		var nominee = oscarsModel.nomineeNamed(category, nomineeTitle);
+		var selectedNomineeTitle = $scope.me.picks[category.name];
+		if (!selectedNomineeTitle) return false;
+
+		var nominee = oscarsModel.nomineeNamed(category, selectedNomineeTitle);
 		return nominee.winner;
 	}
 
