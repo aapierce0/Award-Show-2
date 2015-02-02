@@ -28,8 +28,8 @@
 				<td ng-if="leaderboardName == 'accuracy'">{{oscarsModel.accuracyForUser(user)}}</td>
 				<td ng-if="leaderboardName == 'confidence'">{{oscarsModel.confidenceForUser(user)}}</td>
 
-				<td ng-if="leaderboardName == 'winnings'"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.netIncomeForUser(user)}}</td>
-				<td ng-if="leaderboardName == 'wealth'"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(user)}}</td>
+				<td ng-if="leaderboardName == 'winnings'"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.netIncomeCalledForUser(user) | number:0}}</td>
+				<td ng-if="leaderboardName == 'wealth'"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(user) | number:0}}</td>
 
 			</tr>
 		</tbody>
