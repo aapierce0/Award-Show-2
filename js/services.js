@@ -27,47 +27,14 @@
 
 
 
-var oscarsServices = angular.module("OscarsService", []);
+var oscarsServices = angular.module("OscarsService", ['btford.socket-io']);
 
 
 
-// Socket IO for Angular JS
-oscarsServices.factory('socket', function ($rootScope) {
-	var socket = io.connect();
-	return {
-		on: function (eventName, callback) {
-			socket.on(eventName, function () {  
-				var args = arguments;
-				$rootScope.$apply(function () {
-					callback.apply(socket, args);
-				});
-			});
-		},
-		emit: function (eventName, data, callback) {
-			socket.emit(eventName, data, function () {
-				var args = arguments;
-				$rootScope.$apply(function () {
-					if (callback) {
-						callback.apply(socket, args);
-					}
-				});
-			});
-		},
-		reconnect: function(callback) {
-			socket = io.connect();
-			socket.once("connect", function() {
-				$rootScope.$apply(function() {
-					if (callback) {
-						callback.apply(socket, args);
-					}
-				})
-			})
-		}
-	};
+
+oscarsServices.factory('socket', function(socketFactory) {
+	return socketFactory();
 });
-
-
-
 
 
 
