@@ -18,7 +18,9 @@
 					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.calledOutCategory().value}} Bet</div>
 					
 					<div class="user-pick" ng-class="(userWonCategory(oscarsModel.calledOutCategory()) ? 'correct' : 'incorrect')" ng-if="categoryWasCalled(oscarsModel.calledOutCategory())">
-						<span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span> {{me.picks[oscarsModel.calledOutCategory().name] || "No Selection"}} <span ng-show="userWonCategory(oscarsModel.calledOutCategory())"><span class="glyphicon glyphicon-certificate"></span>+{{oscarsModel.payoutForCategory(oscarsModel.calledOutCategory()) - oscarsModel.calledOutCategory().value | number:0}}</span><span ng-show="!userWonCategory(oscarsModel.calledOutCategory())"><span class="glyphicon glyphicon-certificate"></span>-{{oscarsModel.calledOutCategory().value | number:0}}</div>
+						<span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span> {{me.picks[oscarsModel.calledOutCategory().name] || "No Selection"}} <span ng-show="userWonCategory(oscarsModel.calledOutCategory())"><span class="glyphicon glyphicon-certificate"></span>+{{oscarsModel.payoutForCategory(oscarsModel.calledOutCategory()) - oscarsModel.calledOutCategory().value | number:0}}</span><span ng-if="!me.picks[oscarsModel.calledOutCategory().name]" ng-show="!userWonCategory(oscarsModel.calledOutCategory())"><span class="glyphicon glyphicon-certificate"></span>-{{oscarsModel.calledOutCategory().value | number:0}}</span>
+					</div>
+					
 					<div ng-if="categoryWasCalled(oscarsModel.calledOutCategory()) && !userWonCategory(oscarsModel.calledOutCategory())" class="correct">
 						<span class="glyphicon glyphicon-ok"></span> {{oscarsModel.winningNomineeForCategory(oscarsModel.calledOutCategory()).title}}
 					</div>
@@ -55,7 +57,10 @@
 					<header>{{category.name}}</header>
 					<div class="value"><span class="glyphicon glyphicon-certificate"></span> {{category.value}} Bet</div>
 					<div class="user-pick" ng-class="(userWonCategory(category) ? 'correct' : 'incorrect')">
-						<span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span> {{me.picks[category.name] || "No Selection"}} <span ng-show="userWonCategory(category)"><span class="glyphicon glyphicon-certificate"></span>+{{oscarsModel.payoutForCategory(category) - category.value | number:0}}</span><span ng-show="!userWonCategory(category)"><span class="glyphicon glyphicon-certificate"></span>-{{category.value | number:0}}</div>
+						<span class="glyphicon glyphicon-ok"></span><span class="glyphicon glyphicon-remove"></span> {{me.picks[category.name] || "No Selection"}} <span ng-show="userWonCategory(category)"><span class="glyphicon glyphicon-certificate"></span>+{{oscarsModel.payoutForCategory(category) - category.value | number:0}}</span><span ng-if="me.picks[category.name]" ng-show="!userWonCategory(category)"><span class="glyphicon glyphicon-certificate"></span>-{{category.value | number:0}}</span>
+
+					</div>
+					
 					<div ng-if="!userWonCategory(category)" class="correct"><span class="glyphicon glyphicon-ok"></span> {{oscarsModel.winningNomineeForCategory(category).title}}</div>
 				</div>
 				<span class="glyphicon glyphicon-chevron-right"></span>
