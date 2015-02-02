@@ -142,6 +142,12 @@ oscarsServices.factory('oscarsModel', function($rootScope, $http, socket, $timeo
 		});
 	};
 
+	// This is just the opposite of categoryWasCalled.
+	// This function needs to exist because ng-repeat filter doesn't allow you to negate a filter predicate inline.
+	oscarsModel.categoryWasNotCalled = function(category) {
+		return !oscarsModel.categoryWasCalled(category);
+	}
+
 	oscarsModel.calledOutCategory = function() {
 		return _.findWhere(oscarsModel.categories, {calledOut: true});
 	}
