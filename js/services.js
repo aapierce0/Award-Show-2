@@ -338,7 +338,7 @@ oscarsServices.factory('oscarsModel', function($rootScope, $http, socket, $timeo
 
 				// The item already exists. Find this item, and replace it.
 				var existingIndex = _.indexOf(existingItems, item[uniqueKey]);
-				collection[existingIndex] = item;
+				_(collection[existingIndex]).extend(item);
 
 			} else {
 
