@@ -487,7 +487,7 @@ oscarsApp.controller("AdminCtrl", function($scope, socket, oscarsModel) {
 
 
 	$scope.passwordSubmit = function(passwordAttempt) {
-		if (passwordAttempt == "kevinspacey") {
+		if (passwordAttempt == "oscarnight") {
 			$scope.authenticated = true;
 			$scope.setSelectedTab("users");
 		} else {

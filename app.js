@@ -534,7 +534,7 @@ http.listen(PORT_NUMBER, function(){
 	});
 	console.log("");
 
-	console.log("To start, I recommend pointing your browser to the admin page. The admin password is \"kevinspacey\"");
+	console.log("To start, I recommend pointing your browser to the admin page. The admin password is \"oscarnight\"");
 	console.log("");
 });
 
