@@ -20,7 +20,7 @@ Prerequisite: Have node.js installed on your system.
 Admin
 -----
 
-The admin page is available at [yourhostname]/admin. The password is hard-coded: "kevinspacey".
+The admin page is available at [yourhostname]/admin. The password is hard-coded: "oscarnight".
 
 Once logged in, use this page to view established users, distribute credits, and specifiy category winners. This page is optimised for tablets and laptops.
 

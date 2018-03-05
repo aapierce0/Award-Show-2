@@ -42,12 +42,12 @@
 		<div class="container-fluid">
 			<div class="row main-toolbar">
 				<div class="col-xs-12">
-					<button type="button" class="btn " ng-class="{'btn-link': contentView == 'buzzer', 'btn-primary': contentView == 'categories'}" ng-click="setContentView('categories');">Betting</button>
-					<button type="button" class="btn " ng-class="{'btn-primary': contentView == 'buzzer', 'btn-link': contentView == 'categories'}" ng-click="setContentView('buzzer');">Buzzer</button>
-					
+					<button type="button" class="btn " ng-show="contentView != 'categories'" ng-class="{'btn-link': contentView == 'buzzer', 'btn-primary': contentView == 'categories'}" ng-click="setContentView('categories');">Betting</button>
+					<div style="display:inline-block">
+						<span class="score"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(me) | number:0}}</span>
+					</div>
 					<div style="float:right; display:inline-block">
 						<!-- <span class="username">{{me.name}}</span> -->
-						<span class="score"><span class="glyphicon glyphicon-certificate"></span> {{oscarsModel.balanceForUser(me) | number:0}}</span>
 						<button type="button" class="btn  btn-link" ng-click="logout()">Logout</button>
 					</div>
 				</div>

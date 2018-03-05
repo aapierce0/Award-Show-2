@@ -1,4 +1,4 @@
-PORT_NUMBER = 3000;
+'use strict';
 
 if (typeof String.prototype.startsWith != 'function') {
 	String.prototype.startsWith = function (str){
@@ -15,6 +15,16 @@ var fs = require('fs');
 var _ = require('underscore');
 var uuid = require('node-uuid');
 
+
+
+// Capture a user-defined port number from the command line
+const args = process.argv.slice(2);
+let userProperties = _(['portNumber']).object(args);
+
+// Set default values for undefined properties
+_(userProperties).defaults({
+	"portNumber": 3000,
+});
 
 
 
@@ -115,6 +125,7 @@ try {
 function readConfigSync(configIdentifier) {
 
 	var configFile = __dirname + "/config/"+configIdentifier+".json";
+	console.log(configFile);
 	if (!fs.existsSync(configFile)) {
 
 		// The file does not exists. Try the defaults file.
@@ -126,9 +137,8 @@ function readConfigSync(configIdentifier) {
 	}
 
 	// The file exists, so it's time to read it into memory
-	var configString = fs.readFileSync(configFile, "utf8");
-	var result = JSON.parse(configString);
-	delete configString;
+	const configString = fs.readFileSync(configFile, "utf8");
+	const result = JSON.parse(configString);
 
 	return result;
 }
@@ -486,6 +496,7 @@ io.on('connection', function(socket) {
 
 
 // Fire up the web server.
+const PORT_NUMBER = userProperties.portNumber
 var networkURLs = [];
 http.listen(PORT_NUMBER, function(){
 
@@ -534,7 +545,7 @@ http.listen(PORT_NUMBER, function(){
 	});
 	console.log("");
 
-	console.log("To start, I recommend pointing your browser to the admin page. The admin password is \"kevinspacey\"");
+	console.log("To start, I recommend pointing your browser to the admin page. The admin password is \"oscarnight\"");
 	console.log("");
 });
 
